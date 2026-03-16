@@ -117,6 +117,6 @@ export class TransactionsService {
       }
     }
     await this.transactionRepository.remove(transaction)
-    return { message: "Venta eliminada correctamente" };
+    return { message: 'Venta eliminada correctamente' };
   }
 }

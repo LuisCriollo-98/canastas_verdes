@@ -9,6 +9,12 @@ export class Transaction {
     @Column('decimal')
     total: number
 
+    @Column({ type: 'timestamp' })
+    createdAt: Date;
+
+    @Column({ type: 'timestamp' })
+    updatedAt: Date;
+
     //Fecha de transaccions o fecha de venta
     @CreateDateColumn()
     transactionsDate: Date
@@ -29,6 +35,7 @@ export class TransactionContents {
 
     @Column('decimal')
     price: number
+
     //Muchos contendidos pero solo un producto
     @ManyToOne(() => Product, (product) => product.id, { eager: true, cascade: true })
     product: Product

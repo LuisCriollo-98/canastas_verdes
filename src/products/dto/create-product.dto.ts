@@ -14,7 +14,7 @@ export class CreateProductDto {
     @IsNumber({maxDecimalPlaces:0}, {message: 'Cantidad no valida'})
     inventory: number
 
-    @IsNotEmpty({message:'Se debe realacionar una categoria'})
+    @IsNotEmpty({message:'Se debe relacionar una categoria'})
     @IsInt({message:'La categoria no es valida'})
     categoryId: number
 }
