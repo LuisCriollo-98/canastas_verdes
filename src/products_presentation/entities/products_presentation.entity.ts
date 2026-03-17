@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Product } from "../../products/entities/product.entity";
 
 @Entity()
 export class ProductsPresentation {
@@ -8,9 +9,13 @@ export class ProductsPresentation {
     @Column({ type: 'varchar', length: 100 })
     description: string
 
-    @Column({ type: 'timestamp' })
+    @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 
-    @Column({ type: 'timestamp' })
+    @UpdateDateColumn({ type: 'timestamp' })
     updatedAt: Date;
+
+    @OneToMany(() => Product, (product) => product.presentation, { cascade: true })
+    products: Product[];
 }
+

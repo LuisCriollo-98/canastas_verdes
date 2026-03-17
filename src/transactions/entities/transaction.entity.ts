@@ -9,12 +9,6 @@ export class Transaction {
     @Column('decimal')
     total: number
 
-    @Column({ type: 'timestamp' })
-    createdAt: Date;
-
-    @Column({ type: 'timestamp' })
-    updatedAt: Date;
-
     //Fecha de transaccions o fecha de venta
     @CreateDateColumn()
     transactionsDate: Date

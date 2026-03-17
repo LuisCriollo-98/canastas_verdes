@@ -1,5 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Product } from '../../products/entities/product.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Farm } from '../../farms/entities/farm.entity';
 
 @Entity()
 export class Municipality {
@@ -9,4 +9,6 @@ export class Municipality {
     @Column({ type: 'varchar', length: 60 })
     name: string;
 
+    @OneToMany(() => Farm, (farm) => farm.municipality, { cascade: true })
+    farms: Farm[];
 }

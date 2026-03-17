@@ -17,4 +17,12 @@ export class CreateProductDto {
     @IsNotEmpty({message:'Se debe relacionar una categoria'})
     @IsInt({message:'La categoria no es valida'})
     categoryId: number
+
+    @IsNotEmpty({message:'Se debe relacionar una finca'})
+    @IsInt({message:'La finca no es valida'})
+    farmId: number
+
+    @IsNotEmpty({message:'Se debe relacionar una presentacion'})
+    @IsInt({message:'La presentacion no es valida'})
+    presentationId: number
 }

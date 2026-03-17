@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Municipality } from "../../municipalities/entities/municipality.entity";
+import { Product } from "../../products/entities/product.entity";
 
 @Entity()
 export class Farm {
@@ -20,10 +22,15 @@ export class Farm {
     @Column({ type: 'varchar', length: 255 })
     description: string;
 
-    @Column({ type: 'timestamp' })
+    @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 
-    @Column({ type: 'timestamp' })
+    @UpdateDateColumn({ type: 'timestamp' })
     updatedAt: Date;
 
+    @ManyToOne(() => Municipality, (municipality) => municipality.farms)
+    municipality: Municipality;
+
+    @OneToMany(() => Product, (product) => product.farm, { cascade: true })
+    products: Product[];
 }

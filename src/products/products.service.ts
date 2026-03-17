@@ -5,13 +5,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Category } from 'src/categories/entities/category.entity';
+import { Farm } from 'src/farms/entities/farm.entity';
+import { ProductsPresentation } from 'src/products_presentation/entities/products_presentation.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
-    @InjectRepository(Category) private readonly categoryRepository: Repository<Category>
-
+    @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(Farm) private readonly farmRepository: Repository<Farm>,
+    @InjectRepository(ProductsPresentation) private readonly presentationRepository: Repository<ProductsPresentation>
   ) { }
 
   async create(createProductDto: CreateProductDto) {
@@ -22,10 +25,26 @@ export class ProductsService {
       errors.push('La categoria no existe')
       throw new NotFoundException(errors)
     }
-
+    // Sin la finca no existe
+    const farm = await this.farmRepository.findOneBy({ id: createProductDto.farmId })
+    if (!farm) {
+      let errors: string[] = []
+      errors.push('La finca no existe')
+      throw new NotFoundException(errors)
+    }
+    //Si la presentación no existe
+    const presentation = await this.presentationRepository.findOneBy({ id: createProductDto.presentationId })
+    if (!presentation) {
+      let errors: string[] = []
+      errors.push('La presentación no existe')
+      throw new NotFoundException(errors)
+    }
+    //Guardar el producto
     return this.productRepository.save({
       ...createProductDto,
-      category
+      category,
+      farm,
+      presentation
     })
 
   }
@@ -35,7 +54,9 @@ export class ProductsService {
     const options: FindManyOptions<Product> = {
       // 'relations' actúa como un SQL JOIN para traer los datos de la categoría asociada
       relations: {
-        category: true
+        category: true,
+        farm: true,
+        presentation: true
       },
       // Ordenamos los resultados: los productos más nuevos (ID más alto) aparecen primero
       order: {
@@ -72,7 +93,7 @@ export class ProductsService {
     const product = await this.productRepository.findOne({
       where: { id },
       //Relacionar categoria al momento de filtrar el producto por ID, pero si son bastantes datos es mejor no relacionar
-      relations: { category: true }
+      relations: { category: true, farm: true, presentation: true }
     })
     if (!product) {
       throw new NotFoundException(`El producto con el ID: ${id} no fue encontrado`)
@@ -93,13 +114,29 @@ export class ProductsService {
         errors.push('La categoria no existe')
         throw new NotFoundException(errors)
       }
-      product.category =category
+      product.category = category
+    }
+
+    if (updateProductDto.farmId) {
+      const farm = await this.farmRepository.findOneBy({ id: updateProductDto.farmId })
+      if (!farm) {
+        throw new NotFoundException(['La finca no existe'])
+      }
+      product.farm = farm
+    }
+
+    if (updateProductDto.presentationId) {
+      const presentation = await this.presentationRepository.findOneBy({ id: updateProductDto.presentationId })
+      if (!presentation) {
+        throw new NotFoundException(['La presentación no existe'])
+      }
+      product.presentation = presentation
     }
     return await this.productRepository.save(product)
   }
 
   async remove(id: number) {
-    const product  =  await this.findOne(id)
+    const product = await this.findOne(id)
     await this.productRepository.remove(product)
     return "Producto eliminado";
   }

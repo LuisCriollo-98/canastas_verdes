@@ -1,5 +1,7 @@
 import { Category } from "../../categories/entities/category.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Farm } from "../../farms/entities/farm.entity";
+import { ProductsPresentation } from "../../products_presentation/entities/products_presentation.entity";
 
 @Entity()
 export class Product {
@@ -18,15 +20,21 @@ export class Product {
     @Column({ type: 'int' })
     inventory: number
 
-    @Column({ type: 'timestamp' })
+    @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 
-    @Column({ type: 'timestamp' })
+    @UpdateDateColumn({ type: 'timestamp' })
     updatedAt: Date;
 
     //Relación de muchos a uno- todos los productos, crea una nueva columna donde se relaciona la categoria
-    @ManyToOne(() => Category)
+    @ManyToOne(() => Category, (category) => category.products)
     category: Category
+
+    @ManyToOne(() => Farm, (farm) => farm.products)
+    farm: Farm;
+
+    @ManyToOne(() => ProductsPresentation, (presentation) => presentation.products)
+    presentation: ProductsPresentation;
 
     /** @Column({type: 'int'})
     categoryId: number**/

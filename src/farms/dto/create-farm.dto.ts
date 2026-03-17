@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsInt, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateFarmDto {
     @IsString({ message: 'Nombre no valido' })
@@ -20,4 +20,8 @@ export class CreateFarmDto {
     @IsString({ message: 'Descripcion no valida' })
     @IsNotEmpty({ message: 'La descripción es requerida' })
     description: string;
+
+    @IsNotEmpty({ message: 'El municipio es requerido' })
+    @IsInt({ message: 'El municipio no es valido' })
+    municipalityId: number;
 }

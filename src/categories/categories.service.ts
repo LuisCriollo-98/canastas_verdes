@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import {Category} from './entities/category.entity' // conexion con la entidades
+import { Category } from './entities/category.entity' // conexion con la entidades
 import { AuroraMysqlQueryRunner } from 'typeorm/driver/aurora-mysql/AuroraMysqlQueryRunner.js';
 import { asyncWrapProviders } from 'async_hooks';
 
@@ -13,11 +13,12 @@ export class CategoriesService {
   constructor(
     //Decorador que le dice a NestJS: "Inyéctame el repositorio de la entidad Category"
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category> //Tipo genérico de TypeORM con métodos CRUD para Category
-  ){}
-  
+  ) { }
+
   async create(createCategoryDto: CreateCategoryDto) {
-  //Guarda un nuevo registro en la base de datos 
-    return this.categoryRepository.save(createCategoryDto)
+    //Guarda un nuevo registro en la base de datos 
+    this.categoryRepository.save(createCategoryDto)
+    return { message: 'Categoria creada' }
   }
 
   findAll() {
@@ -27,10 +28,10 @@ export class CategoriesService {
 
   async findOne(id: number) {
     //Permite buscar una categoria por ID
-    const category =await this.categoryRepository.findOneBy({id})
+    const category = await this.categoryRepository.findOneBy({ id })
     //Si no existe la categoria
-    if(!category) {
-      throw new NotFoundException ('La categoria no existe')
+    if (!category) {
+      throw new NotFoundException('La categoria no existe')
     }
     return category
   }
