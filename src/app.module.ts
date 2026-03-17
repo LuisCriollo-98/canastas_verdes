@@ -10,6 +10,7 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { MunicipalitiesModule } from './municipalities/municipalities.module';
 import { ProductsPresentationModule } from './products_presentation/products_presentation.module';
 import { FarmsModule } from './farms/farms.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { FarmsModule } from './farms/farms.module';
     TransactionsModule,
     MunicipalitiesModule,
     ProductsPresentationModule,
-    FarmsModule],
+    FarmsModule,
+    UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })

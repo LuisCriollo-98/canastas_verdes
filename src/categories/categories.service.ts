@@ -4,8 +4,6 @@ import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity' // conexion con la entidades
-import { AuroraMysqlQueryRunner } from 'typeorm/driver/aurora-mysql/AuroraMysqlQueryRunner.js';
-import { asyncWrapProviders } from 'async_hooks';
 
 @Injectable()
 export class CategoriesService {
