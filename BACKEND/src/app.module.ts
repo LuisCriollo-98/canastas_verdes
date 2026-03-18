@@ -11,6 +11,7 @@ import { MunicipalitiesModule } from './municipalities/municipalities.module';
 import { ProductsPresentationModule } from './products_presentation/products_presentation.module';
 import { FarmsModule } from './farms/farms.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { UsersModule } from './users/users.module';
     MunicipalitiesModule,
     ProductsPresentationModule,
     FarmsModule,
-    UsersModule],
+    UsersModule,
+    AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

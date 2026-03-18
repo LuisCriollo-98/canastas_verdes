@@ -17,6 +17,19 @@ export class Product {
     @Column(({ type: 'decimal' }))
     price: number
 
+    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    costLogistics: number
+
+    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    costTransport: number
+
+    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    priceSuggested: number
+
+    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    priceFinal: number
+
+
     @Column({ type: 'int' })
     inventory: number
 
