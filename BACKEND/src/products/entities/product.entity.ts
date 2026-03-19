@@ -33,6 +33,9 @@ export class Product {
     @Column({ type: 'int' })
     inventory: number
 
+    @Column({ type: 'varchar', length: 20, unique: true })
+    code: string;
+
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 

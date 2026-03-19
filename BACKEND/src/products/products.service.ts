@@ -38,20 +38,52 @@ export class ProductsService {
       ...this.calcPrice(price)
     };
   }
+  // Generar código automático basado en municipio y categoría
+  private async generateCode(
+    municipalityName: string,
+    categoryName: string,
+  ): Promise<string> {
+    const municipalityLetter = municipalityName.charAt(0).toUpperCase();
+    const categoryLetter = categoryName.charAt(0).toUpperCase();
+    const prefix = `${municipalityLetter}${categoryLetter}`;
+
+    // Buscar último producto con ese prefijo
+    const lastProduct = await this.productRepository
+      .createQueryBuilder('product')
+      .where('product.code LIKE :prefix', { prefix: `${prefix}%` })
+      .orderBy('product.code', 'DESC')
+      .getOne();
+
+    // Calcular consecutivo
+    let consecutive = 1;
+    if (lastProduct) {
+      const lastNumber = parseInt(lastProduct.code.slice(2));
+      consecutive = lastNumber + 1;
+    }
+
+    return `${prefix}${consecutive.toString().padStart(4, '0')}`;
+  }
+
 
   //Crear producto
   async create(createProductDto: CreateProductDto) {
-
     // Consultas en paralelo
     const [category, farm, presentation] = await Promise.all([
       this.categoryRepository.findOneBy({ id: createProductDto.categoryId }),
-      this.farmRepository.findOneBy({ id: createProductDto.farmId }),
+      this.farmRepository.findOne({
+        where: { id: createProductDto.farmId },
+        relations: { municipality: true }
+      }),
       this.presentationRepository.findOneBy({ id: createProductDto.presentationId }),
     ]);
 
     if (!category) throw new NotFoundException(['La categoría no existe']);
     if (!farm) throw new NotFoundException(['La finca no existe']);
+    if (!farm.municipality) throw new NotFoundException(['La finca no tiene municipio asignado']);
     if (!presentation) throw new NotFoundException(['La presentación no existe']);
+
+    // Generar código
+    const code = await this.generateCode(farm.municipality.name, category.name);
 
     // Calcular precios automáticamente
     const { logisticsCost, transportCost, priceSuggested } =
@@ -59,6 +91,7 @@ export class ProductsService {
 
     const product = this.productRepository.create({
       ...createProductDto,
+      code,
       category,
       farm,
       presentation,
@@ -129,7 +162,10 @@ export class ProductsService {
     }
     //Actualizar la finca
     if (updateProductDto.farmId) {
-      const farm = await this.farmRepository.findOneBy({ id: updateProductDto.farmId })
+      const farm = await this.farmRepository.findOne({
+        where: { id: updateProductDto.farmId },
+        relations: { municipality: true },
+      })
       if (!farm) {
         throw new NotFoundException(['La finca no existe'])
       }
