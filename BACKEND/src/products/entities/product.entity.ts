@@ -14,7 +14,7 @@ export class Product {
     @Column({ type: 'varchar', length: 140, default: 'default.png' })
     image: string
 
-    @Column(({ type: 'decimal' }))
+    @Column(({ type: 'decimal', precision: 10, scale: 2 }))
     price: number
 
     @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
