@@ -23,10 +23,7 @@ export class FarmsController {
   @Get()
   @Roles(UserRole.ADMIN, UserRole.USER)
   findAll(@Query() query: GetFarmsQueryDto) {
-    const municipality = query.municipality_id ? query.municipality_id : null
-    const take = query.take ? query.take : 10
-    const skip = query.skip ? query.skip : 0
-    return this.farmsService.findAll(municipality, take, skip);
+    return this.farmsService.findAll(query);
   }
 
   @Get(':id')

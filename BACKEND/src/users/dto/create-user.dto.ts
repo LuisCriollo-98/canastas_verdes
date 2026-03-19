@@ -18,6 +18,7 @@ export class CreateUserDto {
     @IsString({ message: 'La direccion debe ser texto' })
     address?: string;
 
+    @IsNotEmpty()
     @IsEnum(UserRole, { message: 'El rol no es valido' })
-    role: UserRole;
+    role?: UserRole;
 }

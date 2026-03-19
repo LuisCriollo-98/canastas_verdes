@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Farm } from './entities/farm.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Municipality } from '../municipalities/entities/municipality.entity';
+import { GetFarmsQueryDto } from './dto/get-farm.dto';
 
 @Injectable()
 export class FarmsService {
@@ -29,17 +30,18 @@ export class FarmsService {
     return { message: 'Finca creada exitosamente' }
   }
 
-  async findAll(municipalityId: number | null, take: number, skip: number) {
+  async findAll(query: GetFarmsQueryDto) {
+    const municipalityId = query.municipality_id ? query.municipality_id : null
+    const take = query.take ? query.take : 10
+    const skip = query.skip ? query.skip : 0
     const options: FindManyOptions<Farm> = {
       relations: {
         municipality: true
       },
-      order: {
-        id: 'DESC'
-      },
+      order: { id: 'DESC' },
       take,
       skip
-    }
+    };
     if (municipalityId) {
       options.where = {
         municipality: {
@@ -83,6 +85,6 @@ export class FarmsService {
   async remove(id: number) {
     const farm = await this.findOne(id);
     await this.farmRepository.remove(farm);
-    return 'Finca eliminada';
+    return { message: 'Finca eliminada exitosamente' }
   }
 }

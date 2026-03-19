@@ -5,118 +5,131 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction, TransactionContents } from './entities/transaction.entity';
 import { Between, FindManyOptions, Repository } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
+import { User } from 'src/users/entities/user.entity';
 import { endOfDay, isValid, parseISO, startOfDay } from 'date-fns';
 
 @Injectable()
 export class TransactionsService {
   constructor(
-    @InjectRepository(Transaction) private readonly transactionRepository: Repository<Transaction>,
-    @InjectRepository(TransactionContents) private readonly transactionContentsRepository: Repository<TransactionContents>,
-    @InjectRepository(Product) private readonly productRepository: Repository<Product>,
+    @InjectRepository(Transaction)
+    private readonly transactionRepository: Repository<Transaction>,
+    @InjectRepository(TransactionContents)
+    private readonly transactionContentsRepository: Repository<TransactionContents>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) { }
 
-  async create(createTransactionDto: CreateTransactionDto) {
-    await this.productRepository.manager.transaction(async (transactionEntityManager) => {
-      const transaction = new Transaction()
-      //Calcular el total de la transaccion
-      transaction.total = createTransactionDto.contents.reduce((total, item) => total + (item.quantity * item.price), 0)
+  async create(createTransactionDto: CreateTransactionDto, userId: number) {
+    await this.productRepository.manager.transaction(async (manager) => {
+      //Buscar y asociar usuario
+      const user = await this.userRepository.findOneBy({ id: userId });
+      if (!user) throw new NotFoundException('Usuario no encontrado');
+      //Crear transaccion
+      const transaction = new Transaction();
+      transaction.user = user; //asociar usuario
+      transaction.total = createTransactionDto.contents.reduce(
+        (total, item) => total + (item.quantity * item.price), 0
+      );
+
+      await manager.save(transaction); //guardar transaccion
 
       for (const contents of createTransactionDto.contents) {
-        const product = await transactionEntityManager.findOneBy(Product, { id: contents.productId })
-        //Validacion de producto
-        const errrors: string[] = []
+        const product = await manager.findOneBy(Product, { id: contents.productId });
+        const errors: string[] = [];
+
         if (!product) {
-          errrors.push(`El producto con id: ${contents.productId} no encontrado`)
-          throw new NotFoundException(errrors)
+          errors.push(`El producto con id: ${contents.productId} no encontrado`);
+          throw new NotFoundException(errors);
         }
-        //Validacion de inventario
+
         if (contents.quantity > product.inventory) {
-          errrors.push(`El articulo ${product.name} no tiene suficiente stock`)
-          throw new BadRequestException(errrors)
+          errors.push(`El artículo ${product.name} no tiene suficiente stock`);
+          throw new BadRequestException(errors);
         }
-        // Restar del inventario
-        product.inventory -= contents.quantity
 
-        //Crear instanacio de contents
-        const transactionContent = new TransactionContents()
-        transactionContent.price = contents.price
-        transactionContent.product = product
-        transactionContent.quantity = contents.quantity
-        transactionContent.transaction = transaction
+        product.inventory -= contents.quantity;
+        await manager.save(product);
 
+        const transactionContent = new TransactionContents();
+        transactionContent.price = contents.price;
+        transactionContent.product = product;
+        transactionContent.quantity = contents.quantity;
+        transactionContent.transaction = transaction;
 
-        await transactionEntityManager.save(transaction)
-        await transactionEntityManager.save(transactionContent)
+        await manager.save(transactionContent);
       }
-    })
+    });
 
-    return "Pedido almacenado correctamente";
+    return { message: 'Pedido almacenado correctamente' };
   }
 
   findAll(transactionDate?: string) {
-    //Traer todas las transacciones con sus contenidos y los productos de los contenidos
     const options: FindManyOptions<Transaction> = {
       relations: {
-        contents: true
-      }
-    }
-    //Filtro por fecha de transaccion
+        contents: true,
+        user: true, //incluir usuario para reportes
+      },
+      order: { transactionsDate: 'DESC' }, //mas recientes primero
+    };
+
     if (transactionDate) {
-      //Convertir la fecha de transaccion de string Date
-      const date = parseISO(transactionDate)
-      //Validar que la fecha sea valida
+      const date = parseISO(transactionDate);
       if (!isValid(date)) {
-        throw new BadRequestException('Fecha no valida')
+        throw new BadRequestException('Fecha no válida');
       }
-      //Crear el rango de fechas
-      const start = startOfDay(date)
-      const end = endOfDay(date)
       options.where = {
-        transactionsDate: Between(start, end)
-      }
+        transactionsDate: Between(startOfDay(date), endOfDay(date))
+      };
     }
+
     return this.transactionRepository.find(options);
   }
 
-  //Traer una transaccion por id con sus contenidos y los productos de los contenidos
-  async findOne(id: number) {
-    const transaction = await this.transactionRepository.findOne({
-      where: { id },
-      relations: {
-        contents: true
-      }
-    })
-    //Validacion de transaccion
-    if (!transaction) {
-      throw new NotFoundException(`La transaccion no fue encontrada`)
+  async findOne(id: number, userId?: number) {
+
+    const where: any = { id };
+    if (userId) {
+      where.user = { id: userId };
     }
+
+    const transaction = await this.transactionRepository.findOne({
+      where,
+      relations: { contents: true }
+    });
+
+    if (!transaction) {
+      throw new NotFoundException('La transacción no fue encontrada');
+    }
+
     return transaction;
   }
 
   update(id: number, updateTransactionDto: UpdateTransactionDto) {
     return `This action updates a #${id} transaction`;
   }
-  //Eliminar transaccion
-  async remove(id: number) {
-    const transaction = await this.findOne(id)
-    //Eliminar los contenidos de la transaccion
-    for (const contents of transaction.contents) {
-      const product = await this.productRepository.findOneBy({ id: contents.product.id })
-      //Validacion de producto
-      if (!product) {
-        throw new NotFoundException(`El producto con id: ${contents.product.id} no encontrado`)
-      }
-      //regresar al inventario la cantidad vendida si la venta es cancelada
-      product.inventory += contents.quantity
-      await this.productRepository.save(product)
 
-      const transactionContents = await this.transactionContentsRepository.findOneBy({ id: contents.id })
-      // validacion si existe el contenido
+  async remove(id: number) {
+    const transaction = await this.findOne(id);
+
+    for (const contents of transaction.contents) {
+      const product = await this.productRepository.findOneBy({ id: contents.product.id });
+
+      if (!product) {
+        throw new NotFoundException(`El producto con id: ${contents.product.id} no encontrado`);
+      }
+
+      product.inventory += contents.quantity;
+      await this.productRepository.save(product);
+
+      const transactionContents = await this.transactionContentsRepository.findOneBy({ id: contents.id });
       if (transactionContents) {
-        await this.transactionContentsRepository.remove(transactionContents)
+        await this.transactionContentsRepository.remove(transactionContents);
       }
     }
-    await this.transactionRepository.remove(transaction)
+
+    await this.transactionRepository.remove(transaction);
     return { message: 'Venta eliminada correctamente' };
   }
 }

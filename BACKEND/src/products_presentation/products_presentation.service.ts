@@ -13,8 +13,8 @@ export class ProductsPresentationService {
 
   ) { }
 
-  create(createProductsPresentationDto: CreateProductsPresentationDto) {
-    this.productsPresentationRepository.save(createProductsPresentationDto);
+  async create(createProductsPresentationDto: CreateProductsPresentationDto) {
+    await this.productsPresentationRepository.save(createProductsPresentationDto);
     return { message: 'Presentación de producto creada correctamente' };
   }
 
