@@ -3,10 +3,11 @@ import { CategoriesService } from './categories.service';
 import { CategoriesController } from './categories.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Category])], //importando la configuracion realizada en app.module.ts solo en este modulo
+  imports: [TypeOrmModule.forFeature([Category]), AuthModule], //importando la configuracion realizada en app.module.ts solo en este modulo
   controllers: [CategoriesController],
   providers: [CategoriesService],
 })
-export class CategoriesModule {}
+export class CategoriesModule { }

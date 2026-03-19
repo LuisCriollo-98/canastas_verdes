@@ -4,10 +4,11 @@ import { FarmsController } from './farms.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Farm } from './entities/farm.entity';
 import { Municipality } from '../municipalities/entities/municipality.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Farm, Municipality])],
+  imports: [TypeOrmModule.forFeature([Farm, Municipality]), AuthModule],
   controllers: [FarmsController],
   providers: [FarmsService],
 })
-export class FarmsModule {}
+export class FarmsModule { }

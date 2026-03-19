@@ -24,9 +24,9 @@ export class ProductsService {
   // Método reutilizable para calcular precios
   private calcPrice(price: number) {
     const startPrice = Number(price);
-    const logisticsCost = startPrice * this.PORCENTAJE;
-    const transportCost = startPrice * this.PORCENTAJE;
-    const priceSuggested = startPrice + logisticsCost + transportCost;
+    const logisticsCost = Math.round(startPrice * this.PORCENTAJE);
+    const transportCost = Math.round(startPrice * this.PORCENTAJE);
+    const priceSuggested = Math.round(startPrice + logisticsCost + transportCost);
 
     return { logisticsCost, transportCost, priceSuggested };
   }

@@ -14,19 +14,19 @@ export class Product {
     @Column({ type: 'varchar', length: 140, default: 'default.png' })
     image: string
 
-    @Column(({ type: 'decimal', precision: 10, scale: 2 }))
+    @Column(({ type: 'decimal', precision: 10, scale: 0 }))
     price: number
 
-    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
     costLogistics: number
 
-    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
     costTransport: number
 
-    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
     priceSuggested: number
 
-    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
     priceFinal: number
 
 
