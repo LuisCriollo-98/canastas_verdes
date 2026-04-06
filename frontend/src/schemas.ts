@@ -18,7 +18,7 @@ export const CategorySchema = z.object({
     id: z.number(),
     name: z.string(),
 })
-
+export const CategoriesReponseSchema = z.array(CategorySchema)
 export const CategoryWithProductsSchema = CategorySchema.extend({
     products: z.array(ProductSchema),
 })
