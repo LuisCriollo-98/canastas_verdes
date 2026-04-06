@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Farm } from '../../farms/entities/farm.entity';
+import { Product } from '../../products/entities/product.entity';
 
 @Entity()
 export class Municipality {
@@ -15,6 +16,9 @@ export class Municipality {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToMany(() => Farm, (farm) => farm.municipality, { cascade: true })
+    @OneToMany(() => Farm, (farm) => farm.municipality)
     farms: Farm[];
+
+    @OneToMany(() => Product, (product) => product.municipality)
+    products: Product[];
 }

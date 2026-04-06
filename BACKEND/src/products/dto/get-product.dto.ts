@@ -8,15 +8,19 @@ export class GetProductsQueryDto {
 
     @IsOptional()
     @IsNumberString({}, { message: 'La finca debe ser un número' })
-    farm_id?: string;
+    farm_id?: number;
+
+    @IsOptional()
+    @IsNumberString({}, { message: 'El municipio debe ser un número' })
+    municipality_id?: number;
 
     @IsOptional()
     @IsNumberString({}, { message: 'La cantidad debe ser un numero' })
-    take: number //Sirve para limitar cuantos prodcutos devuelve la consulta 
+    take: number //Sirve para limitar cuantos productos devuelve la consulta 
 
     @IsOptional()
     @IsNumberString({}, { message: 'La cantidad debe ser un numero' })
-    skip: number //Sirve para limitar cuantos prodcutos devuelve la consulta 
+    skip: number //Sirve para limitar cuantos productos devuelve la consulta 
 }
 
 

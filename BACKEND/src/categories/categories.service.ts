@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity' // conexion con la entidades
@@ -24,9 +24,18 @@ export class CategoriesService {
     return this.categoryRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, products?: string) {
+
+    const options: FindOneOptions<Category> = {
+      where: { id }
+    }
+    if (products === "true") {
+      options.relations = {
+        products: true
+      }
+    }
     //Permite buscar una categoria por ID
-    const category = await this.categoryRepository.findOneBy({ id })
+    const category = await this.categoryRepository.findOne(options)
     //Si no existe la categoria
     if (!category) {
       throw new NotFoundException('La categoria no existe')

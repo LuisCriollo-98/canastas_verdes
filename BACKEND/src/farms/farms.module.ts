@@ -4,7 +4,7 @@ import { FarmsController } from './farms.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Farm } from './entities/farm.entity';
 import { Municipality } from '../municipalities/entities/municipality.entity';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Farm, Municipality]), AuthModule],

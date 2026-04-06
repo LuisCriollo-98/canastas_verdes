@@ -4,8 +4,8 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction, TransactionContents } from './entities/transaction.entity';
 import { Between, FindManyOptions, Repository } from 'typeorm';
-import { Product } from 'src/products/entities/product.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Product } from '../products/entities/product.entity';
+import { User } from '../users/entities/user.entity';
 import { endOfDay, isValid, parseISO, startOfDay } from 'date-fns';
 
 @Injectable()

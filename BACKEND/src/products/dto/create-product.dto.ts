@@ -24,9 +24,13 @@ export class CreateProductDto {
     @IsInt({ message: 'La categoria no es valida' })
     categoryId: number
 
-    @IsNotEmpty({ message: 'Se debe relacionar una finca' })
+    @IsNotEmpty({ message: 'Se debe relacionar un municipio' })
+    @IsInt({ message: 'El municipio no es valido' })
+    municipalityId: number
+
+    @IsOptional()
     @IsInt({ message: 'La finca no es valida' })
-    farmId: number
+    farmId?: number
 
     @IsNotEmpty({ message: 'Se debe relacionar una presentacion' })
     @IsInt({ message: 'La presentacion no es valida' })

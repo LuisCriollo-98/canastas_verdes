@@ -2,13 +2,14 @@ import { Category } from "../../categories/entities/category.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Farm } from "../../farms/entities/farm.entity";
 import { ProductsPresentation } from "../../products_presentation/entities/products_presentation.entity";
+import { Municipality } from "../../municipalities/entities/municipality.entity";
 
 @Entity()
 export class Product {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ type: 'varchar', length: 60 })
+    @Column({ type: 'varchar', length: 255 })
     name: string
 
     @Column({ type: 'varchar', length: 140, default: 'default.png' })
@@ -30,7 +31,7 @@ export class Product {
     priceFinal: number
 
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', default: 0 })
     inventory: number
 
     @Column({ type: 'varchar', length: 20, unique: true })
@@ -46,8 +47,11 @@ export class Product {
     @ManyToOne(() => Category, (category) => category.products)
     category: Category
 
-    @ManyToOne(() => Farm, (farm) => farm.products)
-    farm: Farm;
+    @ManyToOne(() => Municipality, (municipality) => municipality.products)
+    municipality: Municipality;
+
+    @ManyToOne(() => Farm, (farm) => farm.products, {nullable: true})
+    farm: Farm | null;
 
     @ManyToOne(() => ProductsPresentation, (presentation) => presentation.products)
     presentation: ProductsPresentation;

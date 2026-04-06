@@ -4,10 +4,11 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { FindManyOptions, Repository } from 'typeorm';
-import { Category } from 'src/categories/entities/category.entity';
-import { Farm } from 'src/farms/entities/farm.entity';
-import { ProductsPresentation } from 'src/products_presentation/entities/products_presentation.entity';
+import { Category } from '../categories/entities/category.entity';
+import { Farm } from '../farms/entities/farm.entity';
+import { ProductsPresentation } from '../products_presentation/entities/products_presentation.entity';
 import { GetProductsQueryDto } from './dto/get-product.dto';
+import { Municipality } from '../municipalities/entities/municipality.entity';
 
 @Injectable()
 export class ProductsService {
@@ -18,7 +19,8 @@ export class ProductsService {
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
     @InjectRepository(Farm) private readonly farmRepository: Repository<Farm>,
-    @InjectRepository(ProductsPresentation) private readonly presentationRepository: Repository<ProductsPresentation>
+    @InjectRepository(ProductsPresentation) private readonly presentationRepository: Repository<ProductsPresentation>,
+    @InjectRepository(Municipality) private readonly municipalityRepository: Repository<Municipality>
   ) { }
 
   // Método reutilizable para calcular precios
@@ -68,22 +70,27 @@ export class ProductsService {
   //Crear producto
   async create(createProductDto: CreateProductDto) {
     // Consultas en paralelo
-    const [category, farm, presentation] = await Promise.all([
+    const [category, presentation, municipality] = await Promise.all([
       this.categoryRepository.findOneBy({ id: createProductDto.categoryId }),
-      this.farmRepository.findOne({
-        where: { id: createProductDto.farmId },
-        relations: { municipality: true }
-      }),
       this.presentationRepository.findOneBy({ id: createProductDto.presentationId }),
+      this.municipalityRepository.findOneBy({ id: createProductDto.municipalityId }),
     ]);
 
     if (!category) throw new NotFoundException(['La categoría no existe']);
-    if (!farm) throw new NotFoundException(['La finca no existe']);
-    if (!farm.municipality) throw new NotFoundException(['La finca no tiene municipio asignado']);
+    if (!municipality) throw new NotFoundException(['El municipio no existe']);
     if (!presentation) throw new NotFoundException(['La presentación no existe']);
 
+    let farm: Farm | null = null;
+    if (createProductDto.farmId) {
+      farm = await this.farmRepository.findOne({
+        where: { id: createProductDto.farmId },
+        relations: { municipality: true },
+      });
+      if (!farm) throw new NotFoundException(['La finca no existe']);
+    }
+
     // Generar código
-    const code = await this.generateCode(farm.municipality.name, category.name);
+    const code = await this.generateCode(municipality.name, category.name);
 
     // Calcular precios automáticamente
     const { logisticsCost, transportCost, priceSuggested } =
@@ -93,6 +100,7 @@ export class ProductsService {
       ...createProductDto,
       code,
       category,
+      municipality,
       farm,
       presentation,
       costLogistics: logisticsCost,
@@ -159,6 +167,14 @@ export class ProductsService {
         throw new NotFoundException(errors)
       }
       product.category = category
+    }
+    //Actualizar el municipio
+    if (updateProductDto.municipalityId) {
+      const municipality = await this.municipalityRepository.findOneBy({ id: updateProductDto.municipalityId })
+      if (!municipality) {
+        throw new NotFoundException(['El municipio no existe'])
+      }
+      product.municipality = municipality
     }
     //Actualizar la finca
     if (updateProductDto.farmId) {

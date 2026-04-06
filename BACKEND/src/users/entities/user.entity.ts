@@ -1,4 +1,4 @@
-import { Transaction } from "src/transactions/entities/transaction.entity";
+import { Transaction } from "../../transactions/entities/transaction.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export enum UserRole {
