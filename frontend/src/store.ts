@@ -6,6 +6,7 @@ interface Store {
     contents: ShopingCart
     addToCart: (product: Product) => void
     updateQuantity: (id: Product['id'], quantity: number) => void //actualiza la cantidad de un producto en el carrito desde el select
+    removeFromCart: (id: Product['id']) => void //elimina un producto del carrito
 }
 //devtools permite ver el estado en el navegador
 export const useStore = create<Store>()(devtools((set, get) => ({
@@ -43,6 +44,12 @@ export const useStore = create<Store>()(devtools((set, get) => ({
         set(() => ({
             contents,
         }))
+    },
+    //funcion para eliminar un producto del carrito
+    removeFromCart: (id) => {
+        const contents = get().contents.filter(item => item.productId !== id)
+        set(() => ({
+            contents,
+        }))
     }
-}
-)))    
+})))    
