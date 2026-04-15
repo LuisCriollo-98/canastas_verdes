@@ -4,6 +4,7 @@
 import { useStore } from "@/src/store"
 import ShoppingCartItem from "./ShoppingCartItem"
 import Amount from "./Amount"
+import SubmitOrderForm from "./SubmitOrderForm"
 
 export default function ShoppingCart() {
     const contents = useStore(state => state.contents)
@@ -27,6 +28,7 @@ export default function ShoppingCart() {
                             amount={total}
                         />
                     </dl>
+                    <SubmitOrderForm />
                 </>
             ) : (
                 <p className="text-xl text-center text-gray-900">El carrito esta vacio</p>

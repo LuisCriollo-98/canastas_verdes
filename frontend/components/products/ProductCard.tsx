@@ -7,29 +7,23 @@ import AddProductButton from "./AddProductButton"
 
 export default function ProductCard({ product }: { product: Product }) {
     return (
-        <div
-            className='rounded bg-white shadow relative p-5'
-        >
-            <div>
-                <Image
-                    src={`${process.env.API_URL}/img/${product.image}`}
-                    alt={`Imagen de producto ${product.name}`}
-                    width={600}
-                    height={500}
-                    priority
-                />
-                {/* informacion del producto*/}
-                <div className="p-3 space-y-2">
-                    {/* nombre del producto*/}
-                    <h3 className="text-xl font-bold text-gray-600">{product.name}</h3>
-                    {/* presentacion del producto*/}
-                    <h3 className="text-xl font-bold text-gray-400">{product.presentation.description}</h3>
-                    {/* precio del producto*/}
-                    <p className="text-2xl font-extrabold  text-gray-900">{formatCurrency(product.priceFinal)}</p>
+        <div className='rounded bg-white shadow relative p-3 md:p-5 flex flex-col'>
+            <div className="flex flex-col flex-1">
+                <div className="relative w-full aspect-video">
+                    <Image
+                        src={`${process.env.API_URL}/img/${product.image}`}
+                        alt={`Imagen de producto ${product.name}`}
+                        fill
+                        className="object-cover rounded"
+                        priority
+                    />
                 </div>
-                <AddProductButton
-                    product={product}
-                />
+                <div className="p-3 space-y-2 flex-1">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-600">{product.name}</h3>
+                    <h3 className="text-sm md:text-base font-bold text-gray-400">{product.presentation.description}</h3>
+                    <p className="text-xl md:text-2xl font-extrabold text-gray-900">{formatCurrency(product.priceFinal)}</p>
+                </div>
+                <AddProductButton product={product} />
             </div>
         </div>
     )
