@@ -1,3 +1,4 @@
+
 import { CartItem } from "@/src/schemas";
 import { formatCurrency } from "@/src/utils";
 import Image from "next/image";
@@ -14,12 +15,18 @@ export default function ShoppingCartItem({ item }: { item: CartItem }) {
                     alt={`Imagen del producto ${item.name}`}
                     width={100}
                     height={100}
+                    priority
                 />
             </div>
             {/*Informacion del producto en el carrio de compras*/}
             <div className="flex-auto space-y-2">
+                {/* nombre del producto*/}
                 <h3 className="text-gray-900"> {item.name}</h3>
+                {/* presentacion del producto*/}
+                <h3 className="text-gray-400"> {item.presentation.description}</h3>
+                {/* precio del producto*/}
                 <p> {formatCurrency(item.priceFinal)}</p>
+                {/* cantidad del producto*/}
                 <select
                     className="w-32 text-center p-2 rounded-lg bg-gray-100"
                     value={item.quantity}

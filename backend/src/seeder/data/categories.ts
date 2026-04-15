@@ -1,0 +1,17 @@
+export const categories = [
+    { name: 'Snacks' },
+    { name: 'Aromáticas' },
+    { name: 'Adicionales' },
+    { name: 'Hongos Comestibles' },
+    { name: 'Sazonadores' },
+    { name: 'Frutas' },
+    { name: 'Verduras' },
+    { name: 'Tubérculo' },
+    { name: 'Postres' },
+    { name: 'Legumbres' },
+    { name: 'Temporada' },
+    { name: 'Lácteos' },
+    { name: 'Autocuidado' },
+    { name: 'Café' },
+    { name: 'Proteínas' },
+];

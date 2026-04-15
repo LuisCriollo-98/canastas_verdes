@@ -1,0 +1,30 @@
+import { Type } from "class-transformer";
+import { ArrayNotEmpty, IsArray, IsInt, IsNotEmpty, IsNumber, ValidateNested } from "class-validator";
+
+export class TransactionContentsDto {
+    //Arreglo de contenidos
+    @IsNotEmpty({ message: 'El ID del producto no puede estar vacío' })
+    @IsInt({ message: 'Producto no válido' })
+    productId: number;
+
+    @IsNotEmpty({ message: 'Cantidad no puede estar vacía' })
+    @IsInt({ message: 'Cantidad no válida' }) 
+    quantity:number;
+
+    @IsNotEmpty({ message: 'Precio no puede estar vacío' })
+    @IsNumber({}, { message: 'Precio no válido' })
+    price: number;
+}
+
+//Dto para la transaccion
+export class CreateTransactionDto {
+    @IsNotEmpty({ message: 'El Total no puede ir vacio' })
+    @IsNumber({}, { message: 'Cantidad no válida' })
+    total: number;
+//Contendidos
+    @IsArray() //Revisa que sea un arreglo
+    @ArrayNotEmpty({ message: 'Los Contenidos no pueden ir vacios' }) //Revisa que el arreglo no este vacio
+    @ValidateNested() // agrega  subvalidadciones
+    @Type(() => TransactionContentsDto)
+    contents: TransactionContentsDto[]
+}

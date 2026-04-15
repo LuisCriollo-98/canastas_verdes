@@ -1,4 +1,5 @@
 
+// componente para agregar productos al carrito
 "use client"
 import { Product } from "@/src/schemas"
 import { ShoppingCart } from "lucide-react"

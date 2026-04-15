@@ -1,3 +1,4 @@
+// componente para mostrar el logo
 export default function Logo() {
     return (
         <h1 className="text-3xl font-extrabold text-white">Canastas verdes {''}

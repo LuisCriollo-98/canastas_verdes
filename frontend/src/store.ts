@@ -7,12 +7,12 @@ interface Store {
     addToCart: (product: Product) => void
     updateQuantity: (id: Product['id'], quantity: number) => void //actualiza la cantidad de un producto en el carrito desde el select
     removeFromCart: (id: Product['id']) => void //elimina un producto del carrito
+    calculateTotal: () => void
 }
 //devtools permite ver el estado en el navegador
 export const useStore = create<Store>()(devtools((set, get) => ({
     total: 0,
     contents: [],
-
     //funcion para agregar productos al carrito
     addToCart: (product) => {
         const { id: productId, ...data } = product
@@ -32,11 +32,10 @@ export const useStore = create<Store>()(devtools((set, get) => ({
                 productId,
             }]
         }
-
-
-        set(() => ({
+            set(() => ({
             contents,
         }))
+        get().calculateTotal()
     },
     //funcion para actualizar la cantidad de un producto en el carrito desde el select
     updateQuantity: (id, quantity) => {
@@ -44,12 +43,20 @@ export const useStore = create<Store>()(devtools((set, get) => ({
         set(() => ({
             contents,
         }))
+        get().calculateTotal()
     },
     //funcion para eliminar un producto del carrito
     removeFromCart: (id) => {
         const contents = get().contents.filter(item => item.productId !== id)
         set(() => ({
             contents,
+        }))
+        get().calculateTotal()
+    },
+    calculateTotal: () => {
+        const total = get().contents.reduce((total, item) => total + (item.quantity*item.priceFinal), 0)
+        set(() => ({
+            total,
         }))
     }
 })))    

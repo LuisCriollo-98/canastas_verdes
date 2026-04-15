@@ -1,3 +1,4 @@
+// componente para mostrar la barra de navegación
 import { CategoriesReponseSchema } from "@/src/schemas";
 import Logo from "./Logo";
 import Link from "next/link";

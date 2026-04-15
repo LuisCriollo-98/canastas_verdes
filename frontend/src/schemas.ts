@@ -3,6 +3,9 @@ import { number, z } from "zod"
 export const ProductSchema = z.object({
     id: z.number(),
     name: z.string(),
+    presentation: z.object({
+        description: z.string(),
+    }),
     image: z.string(),
     //price: z.string().transform((value) => parseFloat(value)),
     //costLogistics: z.string().transform((value) => parseFloat(value)),
@@ -30,6 +33,7 @@ const ShopingCartContentsSchema = ProductSchema.pick({
     priceFinal: true,
     image: true,
     inventory: true,
+    presentation: true,
 }).extend({
     productId: z.number(),
     quantity: z.number(),
