@@ -59,7 +59,7 @@ export default function LoginForm({ redirectTo }: { redirectTo: string }) {
             <button
                 type="submit"
                 disabled={isPending}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 uppercase tracking-wide"
+                className="w-full bg-green-600 hover:bg-green-600 disabled:bg-green-400 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 uppercase tracking-wide"
             >
                 {isPending ? "Iniciando sesión..." : "Iniciar sesión"}
             </button>
@@ -68,7 +68,7 @@ export default function LoginForm({ redirectTo }: { redirectTo: string }) {
                 ¿No tienes cuenta?{" "}
                 <Link
                     href="/register"
-                    className="text-green-600 hover:text-green-700 font-semibold hover:underline"
+                    className="text-green-600 hover:text-green-600 font-semibold hover:underline"
                 >
                     Regístrate aquí
                 </Link>

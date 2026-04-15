@@ -13,7 +13,7 @@ export default function AddProductButton({ product }: { product: Product }) {
             className="absolute top-5 -right-3"
             onClick={() => addToCart(product)}
         >
-            <ShoppingCart className="w-8 h-8 bg-indigo-600 rounded-full text-white p-1" />
+            <ShoppingCart className="w-8 h-8 bg-green-600 rounded-full text-white p-1 " />
         </button>
     )
 }

@@ -1,8 +1,15 @@
 // componente para mostrar el logo
 export default function Logo() {
     return (
-        <h1 className="text-3xl font-extrabold text-white">Canastas verdes {''}
-            <span className="text-green-400 text-xl ">Frutas y verduras</span>
-        </h1>
+        <div className="flex items-center gap-3">
+            <div className="flex flex-col leading-tight">
+                <span className="text-lg font-extrabold text-gray-800 tracking-tight">
+                    Canastas Verdes
+                </span>
+                <span className="text-xs text-gray-400 font-bold">
+                    Frutas y verduras
+                </span>
+            </div>
+        </div>
     )
 }

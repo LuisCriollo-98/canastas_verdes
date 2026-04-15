@@ -22,7 +22,7 @@ export default function ShoppingCart() {
                             />
                         ))}
                     </ul>
-                    <dl className="space-y-6 border-t border-gray-300 py-6 text-sm font-medium text-gray-500">
+                    <dl className="space-y-6 border-t border-gray-300 py-6 text-sm font-medium text-gray-600">
                         <Amount
                             label="Total a pagar"
                             amount={total}

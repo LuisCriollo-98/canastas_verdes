@@ -1,9 +1,9 @@
-// componente para mostrar la barra de navegación
 import { CategoriesReponseSchema } from "@/src/schemas";
 import Logo from "./Logo";
 import Link from "next/link";
 import { getAuthUser } from "@/actions/auth-actions";
 import LogoutButton from "@/components/auth/LogoutButton";
+import CategorySlider from "@/components/ui/CategorySlider";
 
 export async function getCategories() {
     const url = `${process.env.API_URL}/categories`;
@@ -18,40 +18,35 @@ export default async function MainNav() {
     const user = await getAuthUser()
 
     return (
-        <header className="px-10 py-5 bg-gray-700 flex flex-col md:flex-row justify-between ">
-            <div className="flex justify-center">
-                <Logo />
-            </div>
-
-            <nav className="flex flex-col md:flex-row gap-2 items-center mt-5 md:mt-0">
-                {categories.map((category) => (
-                    <Link
-                        key={category.id}
-                        href={`/${category.id}`}
-                        className="text-white hover:text-green-400 font-bold p-2"
-                    >{category.name}</Link>
-                ))}
-
-                {/* Separador */}
-                <span className="hidden md:block text-gray-500">|</span>
-
-                {/* Sección de autenticación */}
-                {user ? (
-                    <div className="flex items-center gap-2">
-                        <span className="text-green-400 font-semibold text-sm">
-                            {user.name}
-                        </span>
-                        <LogoutButton />
+        <>
+            {/* HEADER */}
+            <header className="sticky top-0 z-50 bg-white border-b border-green-200 shadow-sm">
+                <div className="max-w-screen-2xl mx-auto px-6 flex items-center justify-between gap-6 h-16">
+                    <div className="flex-shrink-0">
+                        <Logo />
                     </div>
-                ) : (
-                    <Link
-                        href="/login"
-                        className="text-white hover:text-green-400 font-bold p-2"
-                    >
-                        Iniciar sesión
-                    </Link>
-                )}
-            </nav>
-        </header>
+                    <div className="flex items-center gap-3 flex-shrink-0 pl-3 border-l border-green-600">
+                        {user ? (
+                            <>
+                                <span className="text-green-600 font-semibold text-sm hidden sm:block">
+                                    {user.name}
+                                </span>
+                                <LogoutButton />
+                            </>
+                        ) : (
+                            <Link
+                                href="/login"
+                                className="text-sm font-semibold text-white bg-green-500 hover:bg-green-600 px-4 py-1.5 rounded-full transition-colors duration-150"
+                            >
+                                Iniciar sesión
+                            </Link>
+                        )}
+                    </div>
+                </div>
+            </header>
+
+            {/* SLIDER */}
+            <CategorySlider categories={categories} />
+        </>
     )
 }
