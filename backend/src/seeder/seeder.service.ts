@@ -75,7 +75,7 @@ export class SeederService {
       product.costTransport  = transportCost;
       product.priceSuggested = priceSuggested;
       product.priceFinal     = priceSuggested;
-      product.inventory      = 0;
+      product.inventory      = 10; //se envia 10 por defecto ya que no se tiene el datos de los productos
       product.farm           = null;
       product.category       = category;
       product.municipality   = municipality;

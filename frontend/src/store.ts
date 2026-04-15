@@ -1,13 +1,14 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { Product, ShopingCart } from "./schemas";
+import { Product, ShoppingCart} from "./schemas";
 interface Store {
     total: number;
-    contents: ShopingCart
+    contents: ShoppingCart
     addToCart: (product: Product) => void
     updateQuantity: (id: Product['id'], quantity: number) => void //actualiza la cantidad de un producto en el carrito desde el select
     removeFromCart: (id: Product['id']) => void //elimina un producto del carrito
     calculateTotal: () => void
+    clearCart: () => void
 }
 //devtools permite ver el estado en el navegador
 export const useStore = create<Store>()(devtools((set, get) => ({
@@ -16,7 +17,7 @@ export const useStore = create<Store>()(devtools((set, get) => ({
     //funcion para agregar productos al carrito
     addToCart: (product) => {
         const { id: productId, ...data } = product
-        let contents: ShopingCart = []
+        let contents: ShoppingCart = []
         const duplicated = get().contents.findIndex(item => item.productId === productId)
 
         // validacion de si el producto ya existe en el carrito solo aumenta la cantidad
@@ -51,12 +52,21 @@ export const useStore = create<Store>()(devtools((set, get) => ({
         set(() => ({
             contents,
         }))
+        if(!get().contents.length){
+            get().clearCart()
+        }
         get().calculateTotal()
     },
     calculateTotal: () => {
         const total = get().contents.reduce((total, item) => total + (item.quantity*item.priceFinal), 0)
         set(() => ({
             total,
+        }))
+    },
+    clearCart: () => {
+        set(() => ({
+            contents: [],
+            total: 0,
         }))
     }
 })))    

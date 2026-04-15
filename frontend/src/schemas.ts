@@ -28,7 +28,7 @@ export const CategoryWithProductsSchema = CategorySchema.extend({
 })
 
 /**Carrito de compras  **/
-const ShopingCartContentsSchema = ProductSchema.pick({
+const ShoppingCartContentsSchema = ProductSchema.pick({
     name: true,
     priceFinal: true,
     image: true,
@@ -38,9 +38,32 @@ const ShopingCartContentsSchema = ProductSchema.pick({
     productId: z.number(),
     quantity: z.number(),
 })
+export const ShoppingCartSchema = z.array(ShoppingCartContentsSchema)
 
-export const ShopingCartSchema = z.array(ShopingCartContentsSchema)
+// Esquemas para el pedido
+const OrderContentsSchema = z.object({
+    productId: z.number(),
+    quantity: z.number(),
+    priceFinal: z.number(),
+})
+export const OrderSchema = z.object({
+    total: z.number(),
+    contents: z.array(OrderContentsSchema).min(1, {message: 'El carrito no puede ir vacio'})
+})
+
+// Esquemas para la respuesta del servidor
+export const SuccessResponseSchema = z.object({
+  message: z.string()
+})
+export const ErrorResponseSchema = z.object({
+  message: z.union([z.array(z.string()), z.string()]).transform((val) => 
+    Array.isArray(val) ? val : [val]
+  ),
+  error: z.string().optional(),
+  statusCode: z.number().optional(),
+})
+
 
 export type Product = z.infer<typeof ProductSchema>
-export type ShopingCart = z.infer<typeof ShopingCartSchema>
-export type CartItem = z.infer<typeof ShopingCartContentsSchema>
+export type ShoppingCart = z.infer<typeof ShoppingCartSchema>
+export type CartItem = z.infer<typeof ShoppingCartContentsSchema>

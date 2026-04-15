@@ -35,6 +35,12 @@ export class CategoriesService {
           presentation: true
         }
       }
+      //ordenar los productos por nombre
+      options.order = {
+        products: {
+          name: "ASC"
+        }
+      }
     }
     //Permite buscar una categoria por ID
     const category = await this.categoryRepository.findOne(options)
