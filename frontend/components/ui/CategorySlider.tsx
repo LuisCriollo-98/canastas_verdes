@@ -1,29 +1,15 @@
+
+// COMPONENTE PARA MOSTRAR LAS CATEGORIAS COMO UN SLIDER
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { useRef } from "react"
-
-const categoryEmojis: Record<string, string> = {
-    frutas:               "🍎",
-    verduras:             "🥦",
-    snacks:               "🍿",
-    lácteos:              "🧀",
-    postres:              "🍰",
-    sazonadores:          "🧄",
-    legumbres:            "🫘",
-    tubérculo:            "🥔",
-    aromáticas:           "🌿",
-    temporada:            "🍂",
-    café:                 "☕",
-    proteínas:            "🥚",
-    autocuidado:          "🌱",
-    adicionales:          "➕",
-    "hongos comestibles": "🍄",
-}
 
 type Category = {
     id: string | number
     name: string
+    image: string
 }
 
 export default function CategorySlider({ categories }: { categories: Category[] }) {
@@ -60,9 +46,15 @@ export default function CategorySlider({ categories }: { categories: Category[] 
                         href={`/${category.id}`}
                         className="relative flex-shrink-0 w-44 h-52 rounded-2xl overflow-hidden group cursor-pointer bg-white hover:shadow-lg border border-green-100 hover:border-green-300 transition-all duration-300"
                     >
-                        {/* Emoji decorativo */}
-                        <div className="absolute inset-0 flex items-center justify-center text-8xl opacity-15 group-hover:opacity-30 transition-opacity duration-300 select-none">
-                            {categoryEmojis[category.name.toLowerCase()] ?? "🛒"}
+                        {/* Imagen de categoría */}
+                        <div className="absolute inset-0 flex items-center justify-center p-4">
+                            <Image
+                                src={`${process.env.NEXT_PUBLIC_API_URL}/img/${category.image}`}
+                                alt={category.name}
+                                fill
+                                priority
+                                className="object-contain group-hover:scale-110 transition-transform duration-300"
+                            />
                         </div>
 
                         {/* Degradado inferior */}

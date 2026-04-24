@@ -11,7 +11,7 @@ export default function ProductCard({ product }: { product: Product }) {
             <div className="flex flex-col flex-1">
                 <div className="relative w-full aspect-video">
                     <Image
-                        src={`${process.env.API_URL}/img/${product.image}`}
+                        src={`${process.env.NEXT_PUBLIC_API_URL}/img/${product.image}`}
                         alt={`Imagen de producto ${product.name}`}
                         fill
                         className="object-cover rounded"

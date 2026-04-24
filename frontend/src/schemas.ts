@@ -17,11 +17,13 @@ export const ProductSchema = z.object({
     //createdAt: z.string(),
     //updatedAt: z.string(),
 })
-
+/**Schema que me permite trabajar con la categoria */
 export const CategorySchema = z.object({
     id: z.number(),
     name: z.string(),
+    image: z.string(), //extension del archivo en string
 })
+/**lo que me permite traer la categoria con los productos */
 export const CategoriesReponseSchema = z.array(CategorySchema)
 export const CategoryWithProductsSchema = CategorySchema.extend({
     products: z.array(ProductSchema),

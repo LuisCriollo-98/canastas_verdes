@@ -54,6 +54,9 @@ export class CategoriesService {
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.findOne(id) //findOne hace referencia a al anterior metodo
     category.name = updateCategoryDto.name
+    if (updateCategoryDto.image) {
+      category.image = updateCategoryDto.image
+    }
     return await this.categoryRepository.save(category)
   }
   //Eliminar categorias
