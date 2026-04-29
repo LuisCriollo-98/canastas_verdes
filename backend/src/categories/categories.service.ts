@@ -20,8 +20,12 @@ export class CategoriesService {
   }
 
   findAll() {
-    //llamar todas la categorias 
-    return this.categoryRepository.find();
+    //llamar y ordenar todas la categorias por nombre
+    return this.categoryRepository.find({
+      order: {
+        name: "ASC"
+      }
+    });
   }
 
   async findOne(id: number, products?: string) {
