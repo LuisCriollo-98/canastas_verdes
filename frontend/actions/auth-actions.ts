@@ -61,6 +61,7 @@ export async function login(redirectTo: string, prevState: AuthState, formData: 
         name: json.user.name,
         email: json.user.email,
         role: json.user.role,
+        phone: json.user.phone,
     }), {
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
@@ -80,6 +81,7 @@ export async function register(prevState: AuthState, formData: FormData): Promis
     const password = formData.get("password") as string
     const confirmPassword = formData.get("confirmPassword") as string
     const address = formData.get("address") as string
+    const phone = formData.get("phone") as string
 
     // Validación básica
     const errors: string[] = []
@@ -88,13 +90,15 @@ export async function register(prevState: AuthState, formData: FormData): Promis
     if (!password) errors.push("La contraseña es obligatoria")
     if (password && password.length < 6) errors.push("La contraseña debe tener al menos 6 caracteres")
     if (password !== confirmPassword) errors.push("Las contraseñas no coinciden")
+    if (!phone) errors.push("El teléfono es obligatorio")
 
     if (errors.length > 0) {
         return { errors, success: "" }
     }
 
+    // Petición a la API
     const url = `${process.env.API_URL}/auth/register`
-    const body: Record<string, string> = { name, email, password }
+    const body: Record<string, string> = { name, email, password, phone }
     if (address) body.address = address
 
     const req = await fetch(url, {
