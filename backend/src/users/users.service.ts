@@ -30,7 +30,7 @@ export class UsersService {
   findAll() {
     //Busca todos los usuarios  
     return this.userRepository.find({
-      select: ['id', 'name', 'email', 'address', 'role', 'isActive', 'createdAt']
+      select: ['id', 'name', 'phone', 'email', 'address', 'role', 'isActive', 'createdAt']
     })
   }
 

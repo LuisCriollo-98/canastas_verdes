@@ -110,7 +110,7 @@ export default function RegisterForm() {
           htmlFor="address"
           className="block text-sm font-semibold text-gray-700 mb-1"
         >
-          Dirección{" "}
+          Dirección
           <span className="text-gray-400 font-normal">(opcional)</span>
         </label>
         <input

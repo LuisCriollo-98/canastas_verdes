@@ -11,6 +11,12 @@ export class RegisterDto {
   @IsEmail({}, { message: 'El formato del correo electrónico no es válido' })
   email: string;
 
+  @IsNotEmpty({ message: 'El celular es obligatorio' })
+  @IsString({ message: 'El celular debe ser una cadena de texto' })
+  @MinLength(10, { message: 'El celular debe tener al menos 10 caracteres' })
+  @MaxLength(10, { message: 'El celular no debe exceder los 10 caracteres' })
+  phone: string;
+
   @IsNotEmpty({ message: 'La contraseña es obligatoria' })
   @IsString({ message: 'La contraseña debe ser una cadena de texto' })
   @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
