@@ -11,7 +11,8 @@ export default function ShoppingCartItem({ item }: { item: CartItem }) {
         <li className="flex items-center space-x-6 py-6 relative">
             <div className='h-24 w-24'>
                 <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/img/${item.image}`}
+                    //imagen del producto dentro del carrito de compras
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/img/products/${item.image}`}
                     alt={`Imagen del producto ${item.name}`}
                     width={100}
                     height={100}
@@ -44,7 +45,7 @@ export default function ShoppingCartItem({ item }: { item: CartItem }) {
                 </select>
             </div>
             {/*Boton para eliminar el producto del carrito*/}
-            <div className='absolute top-10 -right-0'>
+            <div className='absolute top-10 right-0'>
                 <button
                     type="button"
                     onClick={() => removeFromCart(item.productId)}

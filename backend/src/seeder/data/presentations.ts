@@ -26,14 +26,12 @@ export const presentations = [
     { description: 'Medio litro' },
     { description: '500 ml' },
     { description: '250 ml' },
-    { description: '250 ml' },
-    { description: '500 ml' },
     { description: 'Medio Litro' },
     { description: 'Libra' },
     { description: '25gr' },
     { description: 'Frasco 100gr' },
     { description: 'Media mano' },
-    { description: '150gs' },
+    { description: '150gr' },
     { description: '300gr' },
     { description: 'Grande' },
     { description: '200gr' },
@@ -48,4 +46,6 @@ export const presentations = [
     { description: '1 kilo - 8 Porciones' },
     { description: '200gr' },
     { description: '120gr' },
+    { description: 'Libra molido' },
+    { description: 'Libra en grano' }
 ];

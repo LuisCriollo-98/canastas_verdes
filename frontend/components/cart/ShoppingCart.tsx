@@ -31,7 +31,7 @@ export default function ShoppingCart() {
                     <SubmitOrderForm />
                 </>
             ) : (
-                <p className="text-xl text-center text-gray-900">El carrito esta vacio</p>
+                <p className="text-xl text-center font-bold text-gray-900">El carrito esta vacio</p>
             )}
         </>
     )

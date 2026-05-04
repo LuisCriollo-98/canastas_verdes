@@ -12,7 +12,6 @@ import { ProductsPresentationModule } from './products_presentation/products_pre
 import { FarmsModule } from './farms/farms.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { SeederModule } from './seeder/seeder.module';
 
 @Module({
   imports: [

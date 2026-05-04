@@ -25,7 +25,7 @@ export class SeederService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
     private readonly dataSource: DataSource,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     await this.dataSource.dropDatabase();
@@ -51,35 +51,36 @@ export class SeederService {
     await this.productsPresentationRepository.save(presentations);
 
     for (const seedProduct of products) {  // ✅ for...of no for await
-      const category     = await this.categoryRepository.findOneBy({ name: seedProduct.category });
+      const category = await this.categoryRepository.findOneBy({ name: seedProduct.category });
       const municipality = await this.municipalityRepository.findOneBy({ name: seedProduct.municipality });
       const presentation = await this.productsPresentationRepository.findOneBy({ description: seedProduct.description });
 
-      if (!category)     { console.warn(`⚠️ Categoría no encontrada: ${seedProduct.category}`); continue; }
-      if (!municipality) { console.warn(`⚠️ Municipio no encontrado: ${seedProduct.municipality}`); continue; }
-      if (!presentation) { console.warn(`⚠️ Presentación no encontrada: ${seedProduct.description}`); continue; }
+      if (!category) { console.warn(`Categoría no encontrada: ${seedProduct.category}`); continue; }
+      if (!municipality) { console.warn(`Municipio no encontrado: ${seedProduct.municipality}`); continue; }
+      if (!presentation) { console.warn(`Presentación no encontrada: ${seedProduct.description}`); continue; }
 
 
       const code = await this.generateCode(municipality.name, category.name);
 
 
-      const logisticsCost  = Math.round(seedProduct.price * this.PORCENTAJE);
-      const transportCost  = Math.round(seedProduct.price * this.PORCENTAJE);
+      const logisticsCost = Math.round(seedProduct.price * this.PORCENTAJE);
+      const transportCost = Math.round(seedProduct.price * this.PORCENTAJE);
       const priceSuggested = Math.round(seedProduct.price + logisticsCost + transportCost);
 
-      const product          = new Product();
-      product.code           = code;
-      product.name           = seedProduct.name;
-      product.price          = seedProduct.price;
-      product.costLogistics  = logisticsCost;
-      product.costTransport  = transportCost;
+      const product = new Product();
+      product.code = code;
+      product.name = seedProduct.name;
+      product.image = seedProduct.image;
+      product.price = seedProduct.price;
+      product.costLogistics = logisticsCost;
+      product.costTransport = transportCost;
       product.priceSuggested = priceSuggested;
-      product.priceFinal     = priceSuggested;
-      product.inventory      = 10; //se envia 10 por defecto ya que no se tiene el datos de los productos
-      product.farm           = null;
-      product.category       = category;
-      product.municipality   = municipality;
-      product.presentation   = presentation;
+      product.priceFinal = priceSuggested;
+      product.inventory = 10; //se envia 10 por defecto ya que no se tiene el datos de los productos
+      product.farm = null;
+      product.category = category;
+      product.municipality = municipality;
+      product.presentation = presentation;
 
       await this.productRepository.save(product);
     }
