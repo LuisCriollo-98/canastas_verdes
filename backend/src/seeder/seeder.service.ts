@@ -9,6 +9,9 @@ import { categories } from "./data/categories";
 import { municipalities } from "./data/municipalities";
 import { presentations } from "./data/presentations";
 import { products } from "./data/products";
+import * as bcrypt from 'bcrypt';
+import { User, UserRole } from "../users/entities/user.entity";
+import { users } from "./data/user";
 
 @Injectable()
 export class SeederService {
@@ -25,6 +28,8 @@ export class SeederService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
     private readonly dataSource: DataSource,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) { }
 
   async onModuleInit() {
@@ -46,11 +51,28 @@ export class SeederService {
   }
 
   async seed() {
+    // Crear usuario administrador
+    for(const seedUser of users) {
+      const user = new User()
+      user.name = seedUser.name;
+      user.email = seedUser.email;
+      user.phone = seedUser.phone;
+      user.address = seedUser.address;
+      user.role = seedUser.role;
+      user.password = await bcrypt.hash('admin123', 10);
+      await this.userRepository.save(user);
+    }
+
+    // Crear categorías
     await this.categoryRepository.save(categories);
+
+    // Crear municipios
     await this.municipalityRepository.save(municipalities);
+
+    // Crear presentaciones
     await this.productsPresentationRepository.save(presentations);
 
-    for (const seedProduct of products) {  // ✅ for...of no for await
+    for (const seedProduct of products) {  
       const category = await this.categoryRepository.findOneBy({ name: seedProduct.category });
       const municipality = await this.municipalityRepository.findOneBy({ name: seedProduct.municipality });
       const presentation = await this.productsPresentationRepository.findOneBy({ description: seedProduct.description });

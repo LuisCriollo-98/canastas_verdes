@@ -7,6 +7,7 @@ import { Category } from '../categories/entities/category.entity';
 import { Municipality } from '../municipalities/entities/municipality.entity';
 import { ProductsPresentation } from '../products_presentation/entities/products_presentation.entity';
 import { Product } from '../products/entities/product.entity';
+import { User } from '../users/entities/user.entity';
 
 @Module({
     imports: [
@@ -18,7 +19,7 @@ import { Product } from '../products/entities/product.entity';
             inject: [ConfigService]
 
         }),
-        TypeOrmModule.forFeature([Product,Category, Municipality, ProductsPresentation])
+        TypeOrmModule.forFeature([Product, Category, Municipality, ProductsPresentation, User])
     ],
     providers: [SeederService],
 })
