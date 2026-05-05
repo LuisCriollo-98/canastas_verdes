@@ -70,7 +70,11 @@ export async function login(redirectTo: string, prevState: AuthState, formData: 
         path: "/",
     })
 
-    // Redirigir al destino indicado o a la página principal
+    // Redirigir al destino segun rol de usuario
+    const role = json.user.role as string
+    if (role === "admin") {
+        redirect("/admin")
+    }
     redirect(redirectTo || "/")
 }
 
