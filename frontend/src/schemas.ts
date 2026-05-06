@@ -17,6 +17,12 @@ export const ProductSchema = z.object({
     //createdAt: z.string(),
     //updatedAt: z.string(),
 })
+// lo que me permite traer la lista de productos de la peticion a /products
+export const ProductsResponseSchema = z.object({
+    products: z.array(ProductSchema),
+    total: z.number(),
+})
+
 /**Schema que me permite trabajar con la categoria */
 export const CategorySchema = z.object({
     id: z.number(),
@@ -50,19 +56,19 @@ const OrderContentsSchema = z.object({
 })
 export const OrderSchema = z.object({
     total: z.number(),
-    contents: z.array(OrderContentsSchema).min(1, {message: 'El carrito no puede ir vacio'})
+    contents: z.array(OrderContentsSchema).min(1, { message: 'El carrito no puede ir vacio' })
 })
 
 // Esquemas para la respuesta del servidor
 export const SuccessResponseSchema = z.object({
-  message: z.string()
+    message: z.string()
 })
 export const ErrorResponseSchema = z.object({
-  message: z.union([z.array(z.string()), z.string()]).transform((val) => 
-    Array.isArray(val) ? val : [val]
-  ),
-  error: z.string().optional(),
-  statusCode: z.number().optional(),
+    message: z.union([z.array(z.string()), z.string()]).transform((val) =>
+        Array.isArray(val) ? val : [val]
+    ),
+    error: z.string().optional(),
+    statusCode: z.number().optional(),
 })
 
 
