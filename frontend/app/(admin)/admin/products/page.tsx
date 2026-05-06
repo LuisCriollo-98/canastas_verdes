@@ -1,7 +1,9 @@
+import Heading from "@/components/ui/Heading";
+
 export default function ProductsPage() {
   return (
-    <div>
-      <h1>Productos</h1>
-    </div>
+    <>
+      <Heading>Administrar Productos</Heading>
+    </>
   );
 }
