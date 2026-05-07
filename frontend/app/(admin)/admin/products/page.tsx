@@ -1,5 +1,6 @@
 import ProductsTable from "@/components/products/ProductsTable";
 import Heading from "@/components/ui/Heading";
+import Pagination from "@/components/ui/Pagination";
 import { ProductsResponseSchema } from "@/src/schemas";
 import { isValidPage } from "@/src/utils";
 import { cookies } from "next/headers";
@@ -44,9 +45,16 @@ export default async function ProductsPage({
   const { page } = await searchParams;
   if (!isValidPage(+page)) redirect("/admin/products?page=1");
 
-  const productsParPage = 10;
+  //productos por pagina
+  const productsParPage = 20;
+  //salto que se hace para traer los productos
   const skip = (+page - 1) * productsParPage;
   const { products, total } = await getProducts(productsParPage, skip);
+
+  //calculo del total de paginas
+  const totalPages = Math.ceil(total / productsParPage);
+  //Valida que la pagina sea menor o igual al total de paginas
+  if (+page > totalPages) redirect("/admin/products?page=1");
 
   return (
     <div className="text-center">
@@ -57,6 +65,11 @@ export default async function ProductsPage({
       <div className="flex justify-center">
         <ProductsTable products={products} />
       </div>
+      <Pagination
+        page={+page}
+        totalPages={totalPages}
+        baseUrl="/admin/products"
+      />
     </div>
   );
 }
