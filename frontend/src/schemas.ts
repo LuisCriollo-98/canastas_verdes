@@ -30,7 +30,7 @@ export const CategorySchema = z.object({
     image: z.string(), //extension del archivo en string
 })
 /**lo que me permite traer la categoria con los productos */
-export const CategoriesReponseSchema = z.array(CategorySchema)
+export const CategoriesResponseSchema = z.array(CategorySchema)
 export const CategoryWithProductsSchema = CategorySchema.extend({
     products: z.array(ProductSchema),
 })

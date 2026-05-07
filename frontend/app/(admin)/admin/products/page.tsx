@@ -4,6 +4,7 @@ import Pagination from "@/components/ui/Pagination";
 import { ProductsResponseSchema } from "@/src/schemas";
 import { isValidPage } from "@/src/utils";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 async function getProducts(take: number, skip: number) {
@@ -57,14 +58,31 @@ export default async function ProductsPage({
   if (+page > totalPages) redirect("/admin/products?page=1");
 
   return (
-    <div className="text-center">
-      <Heading>Administrar Productos</Heading>
-      <p className="text-sm text-gray-700 dark:text-gray-700 mb-4">
-        Actualmente tienes {total} productos
-      </p>
-      <div className="flex justify-center">
-        <ProductsTable products={products} />
+    <div>
+      {/* Header con título y botón */}
+      <div className="flex flex-col mb-6">
+        <div className="flex justify-end mb-4">
+          <Link
+            href="/admin/products/new"
+            className="rounded bg-green-600 text-white font-bold py-2 px-10 hover:bg-green-700 transition-colors"
+          >
+            Nuevo Producto
+          </Link>
+        </div>
+        <div>
+          <Heading>Administrar Productos</Heading>
+          <p className="text-sm text-gray-500 mt-1">
+            Actualmente tienes{" "}
+            <span className="font-semibold text-green-600">{total}</span>{" "}
+            productos
+          </p>
+        </div>
       </div>
+
+      {/* Tabla */}
+      <ProductsTable products={products} />
+
+      {/* Paginacion */}
       <Pagination
         page={+page}
         totalPages={totalPages}

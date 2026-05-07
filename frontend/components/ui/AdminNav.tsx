@@ -30,7 +30,10 @@ export default function AdminNav() {
           Categorias
         </Link>
 
-        <Link href={"/"} className="rounded bg-green-400 font-bold py-2 px-10">
+        <Link
+          href={"/"}
+          className="rounded bg-green-600 text-white font-bold py-2 px-10"
+        >
           Tienda
         </Link>
 
