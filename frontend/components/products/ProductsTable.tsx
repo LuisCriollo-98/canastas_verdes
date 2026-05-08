@@ -60,8 +60,6 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                                                     className="text-green-600 hover:text-green-600"
                                                     href={`/admin/products/${product.id}/edit`}
                                                 >Editar  <span className="sr-only">, {product.name}</span> </Link>
-
-
                                                 {/* Boton de eliminar */}
                                                 <form>
                                                     <input type="submit"

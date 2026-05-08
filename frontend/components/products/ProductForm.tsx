@@ -3,7 +3,9 @@ import {
   MunicipalityResponseSchema,
   ProductPresentationResponseSchema,
 } from "@/src/schemas";
+import { cookies } from "next/headers";
 
+//Obtener las categorias
 async function getCategories() {
   const url = `${process.env.API_URL}/categories`;
   const req = await fetch(url);
@@ -12,29 +14,41 @@ async function getCategories() {
   return categories;
 }
 
+//Obtener los municipios
 async function getMunicipalities() {
-  const url = `${process.env.API_URL}/municipalities`;
-  const req = await fetch(url);
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value
+
+  const url = `${process.env.API_URL}/municipalities`
+  const req = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}`, cache: "no-store" }
+  })
   const json = await req.json();
   const municipalities = MunicipalityResponseSchema.parse(json);
-  return municipalities;
+  return municipalities
 }
 
+//Obtener las presentaciones de los productos
 async function getPresentations() {
-  const url = `${process.env.API_URL}/products-presentations`;
-  const req = await fetch(url);
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value
+
+  const url = `${process.env.API_URL}/products-presentation`
+  const req = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}`, cache: "no-store" }
+  })
   const json = await req.json();
   const presentations = ProductPresentationResponseSchema.parse(json);
-  return presentations;
+  return presentations
 }
 
-export default async function ProductForm() {
-  const categories = await getCategories();
-  const municipalities = await getMunicipalities();
-  const presentations = await getPresentations();
 
-  console.log(municipalities);
-  console.log(presentations);
+export default async function ProductForm() {
+  //obtener todos los datos necesarios para el formulario
+  const categories = await getCategories()
+  const municipalities = await getMunicipalities()
+  const presentations = await getPresentations()
+
   return (
     <>
       {/* nombre del producto*/}
@@ -155,6 +169,11 @@ export default async function ProductForm() {
           name="municipalityId"
         >
           <option value="">Seleccionar Municipio</option>
+          {municipalities.map((municipality) => (
+            <option key={municipality.id} value={municipality.id}>
+              {municipality.name}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -169,6 +188,11 @@ export default async function ProductForm() {
           name="presentationId"
         >
           <option value="">Seleccionar Presentación</option>
+          {presentations.map((presentation) => (
+            <option key={presentation.id} value={presentation.id}>
+              {presentation.description}
+            </option>
+          ))}
         </select>
       </div>
     </>
