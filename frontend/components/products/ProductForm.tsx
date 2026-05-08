@@ -1,4 +1,8 @@
-import { CategoriesResponseSchema } from "@/src/schemas";
+import {
+  CategoriesResponseSchema,
+  MunicipalityResponseSchema,
+  ProductPresentationResponseSchema,
+} from "@/src/schemas";
 
 async function getCategories() {
   const url = `${process.env.API_URL}/categories`;
@@ -8,8 +12,29 @@ async function getCategories() {
   return categories;
 }
 
+async function getMunicipalities() {
+  const url = `${process.env.API_URL}/municipalities`;
+  const req = await fetch(url);
+  const json = await req.json();
+  const municipalities = MunicipalityResponseSchema.parse(json);
+  return municipalities;
+}
+
+async function getPresentations() {
+  const url = `${process.env.API_URL}/products-presentations`;
+  const req = await fetch(url);
+  const json = await req.json();
+  const presentations = ProductPresentationResponseSchema.parse(json);
+  return presentations;
+}
+
 export default async function ProductForm() {
   const categories = await getCategories();
+  const municipalities = await getMunicipalities();
+  const presentations = await getPresentations();
+
+  console.log(municipalities);
+  console.log(presentations);
   return (
     <>
       {/* nombre del producto*/}

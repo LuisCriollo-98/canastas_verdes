@@ -35,6 +35,22 @@ export const CategoryWithProductsSchema = CategorySchema.extend({
     products: z.array(ProductSchema),
 })
 
+/**Schema que me permite trabajar con la presentacion del producto */
+export const ProductPresentationSchema = z.object({
+  id: z.number(),
+  description: z.string(),
+})
+
+export const ProductPresentationResponseSchema = z.array(ProductPresentationSchema)
+
+/**Schema que me permite trabajar con el municipio */
+export const MunicipalitySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+})
+
+export const MunicipalityResponseSchema = z.array(MunicipalitySchema)
+
 /**Carrito de compras  **/
 const ShoppingCartContentsSchema = ProductSchema.pick({
     name: true,
