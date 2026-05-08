@@ -64,7 +64,20 @@ export default async function ProductForm() {
           name="name"
         />
       </div>
-
+      {/* precio del producto*/}
+      <div className="space-y-2 ">
+        <label htmlFor="price" className="block">
+          Precio
+        </label>
+        <input
+          id="price"
+          type="number"
+          placeholder="Precio"
+          className="border border-gray-300 w-full p-2"
+          name="price"
+          min={0}
+        />
+      </div>
       {/* costo logistico del producto*/}
       <div className="space-y-2 ">
         <label htmlFor="costLogistic" className="block">

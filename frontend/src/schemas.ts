@@ -37,16 +37,16 @@ export const CategoryWithProductsSchema = CategorySchema.extend({
 
 /**Schema que me permite trabajar con la presentacion del producto */
 export const ProductPresentationSchema = z.object({
-  id: z.number(),
-  description: z.string(),
+    id: z.number(),
+    description: z.string(),
 })
 
 export const ProductPresentationResponseSchema = z.array(ProductPresentationSchema)
 
 /**Schema que me permite trabajar con el municipio */
 export const MunicipalitySchema = z.object({
-  id: z.number(),
-  name: z.string(),
+    id: z.number(),
+    name: z.string(),
 })
 
 export const MunicipalityResponseSchema = z.array(MunicipalitySchema)
@@ -87,6 +87,26 @@ export const ErrorResponseSchema = z.object({
     statusCode: z.number().optional(),
 })
 
+/**
+ * Schema que me permite trabajar con el formulario de productos
+ */
+export const ProductFormSchema = z.object({
+    name: z.string()
+        .min(1, { message: 'El nombre del producto no puede ir vacío' }),
+    price: z.coerce.number({ message: 'Precio no válido' })
+        .min(1, { message: 'El precio debe ser mayor a 0' }),
+    priceFinal: z.coerce.number({ message: 'Precio final no válido' })
+        .min(1, { message: 'El precio final debe ser mayor a 0' }),
+    inventory: z.coerce.number({ message: 'Inventario no válido' })
+        .min(1, { message: 'El inventario debe ser mayor a 0' }),
+    categoryId: z.coerce.number({ message: 'La categoría no es válida' })
+        .min(1, { message: 'Selecciona una categoría' }),
+    municipalityId: z.coerce.number({ message: 'El municipio no es válido' })
+        .min(1, { message: 'Selecciona un municipio' }),
+    presentationId: z.coerce.number({ message: 'La presentación no es válida' })
+        .min(1, { message: 'Selecciona una presentación' }),
+
+})
 
 export type Product = z.infer<typeof ProductSchema>
 export type ShoppingCart = z.infer<typeof ShoppingCartSchema>
