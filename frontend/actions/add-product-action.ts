@@ -1,6 +1,7 @@
 "use server"
 
-import { ProductFormSchema } from "@/src/schemas"
+import { ErrorResponseSchema, ProductFormSchema } from "@/src/schemas"
+import { cookies } from "next/headers"
 
 type ActionStateType = {
     errors: string[]
@@ -22,9 +23,31 @@ export async function addProduct(prevState: ActionStateType, formData: FormData)
             success: ''
         }
     }
+    //Comunicar con la API a travez de una peticion 
+    const cookieStore = await cookies()
+    const token = cookieStore.get("auth_token")?.value
 
+    const url = `${process.env.API_URL}/products`
+    const req = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(product.data),
+    })
+    const json = await req.json()
+
+    //validacion de la respuesta del servidor 
+    if (!req.ok) {
+        const errors = ErrorResponseSchema.parse(json)
+        return {
+            errors: errors.message.map(issue => issue),
+            success: ''
+        }
+    }
     return {
         errors: [],
-        success: ""
+        success: 'Producto agregado correctamente'
     }
 }
