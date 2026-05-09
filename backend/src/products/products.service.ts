@@ -28,9 +28,9 @@ export class ProductsService {
     const startPrice = Number(price);
     const logisticsCost = Math.round(startPrice * this.PORCENTAJE);
     const transportCost = Math.round(startPrice * this.PORCENTAJE);
-    const priceSuggested = Math.round(startPrice + logisticsCost + transportCost);
+    const priceFinal = Math.round(startPrice + logisticsCost + transportCost);
 
-    return { logisticsCost, transportCost, priceSuggested };
+    return { logisticsCost, transportCost, priceFinal };
   }
 
   //Previsualizar precios
@@ -93,7 +93,7 @@ export class ProductsService {
     const code = await this.generateCode(municipality.name, category.name);
 
     // Calcular precios automáticamente
-    const { logisticsCost, transportCost, priceSuggested } =
+    const { logisticsCost, transportCost, priceFinal } =
       this.calcPrice(createProductDto.price);
 
     const product = this.productRepository.create({
@@ -105,8 +105,7 @@ export class ProductsService {
       presentation,
       costLogistics: logisticsCost,
       costTransport: transportCost,
-      priceSuggested,
-      priceFinal: createProductDto.priceFinal ?? priceSuggested,
+      priceFinal,
     });
 
     return this.productRepository.save(product);
@@ -153,10 +152,10 @@ export class ProductsService {
     Object.assign(product, updateProductDto)
     //Actualizar el precio
     if (updateProductDto.price) {
-      const { logisticsCost, transportCost, priceSuggested } = this.calcPrice(updateProductDto.price)
+      const { logisticsCost, transportCost, priceFinal } = this.calcPrice(updateProductDto.price)
       product.costLogistics = logisticsCost
       product.costTransport = transportCost
-      product.priceSuggested = priceSuggested
+      product.priceFinal = priceFinal
     }
     //Actualizar la categoria
     if (updateProductDto.categoryId) {

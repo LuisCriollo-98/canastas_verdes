@@ -10,7 +10,7 @@ type PricePreview = {
     price: number
     logisticsCost: number
     transportCost: number
-    priceSuggested: number
+    priceFinal: number
 }
 
 type Props = {
@@ -22,24 +22,13 @@ type Props = {
 export default function ProductFormClient({ categories, municipalities, presentations }: Props) {
     const [preview, setPreview] = useState<PricePreview | null>(null)
     const [priceFinal, setPriceFinal] = useState(0)
-    const [priceSuggested, setPriceSuggested] = useState(0)
-
     async function handlePriceChange(e: React.ChangeEvent<HTMLInputElement>) {
         const price = Number(e.target.value)
         if (!price || price <= 0) { setPreview(null); return }
         const data = await previewPrices(price)
         if (!data) return
         setPreview(data)
-        setPriceSuggested(data.priceSuggested)
-        setPriceFinal(data.priceSuggested)
-
-    }
-
-
-    function handlePriceSuggestedChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setPriceSuggested(Number(e.target.value))
-        setPriceFinal(Number(e.target.value))   // al editar sugerido actualiza final
-
+        setPriceFinal(data.priceFinal)
     }
 
     return (
@@ -85,20 +74,19 @@ export default function ProductFormClient({ categories, municipalities, presenta
                     readOnly />
             </div>
 
-            {/* precio sugerido — editable, al modificar actualiza priceFinal */}
+            {/* precio sugerido — editable, al modificar actualiza priceFinal 
             <div className="space-y-2">
-                <label htmlFor="priceSuggested" className="block">
+                <label htmlFor="priceFinal" className="block">
                     Precio sugerido
                     <span className="text-xs text-gray-400 ml-1">(valor modificado por el usuario)</span>
                 </label>
-                <input id="priceSuggested" type="number"
+                <input id="priceFinal" type="number"
                     className="border border-gray-300 w-full p-2"
-                    name="priceSuggested"
-                    value={priceSuggested}
-                    onChange={handlePriceSuggestedChange} />
-            </div>
+                    name="priceFinal"
+                    value={priceFinal}
+                    onChange={handlePriceChange} />
+            </div>*/}
 
-            {/* precio final — solo lectura, refleja priceSuggested */}
             <div className="space-y-2">
                 <label htmlFor="priceFinal" className="block">Precio final</label>
                 <input id="priceFinal" type="number"

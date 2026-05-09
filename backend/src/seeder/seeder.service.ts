@@ -52,7 +52,7 @@ export class SeederService {
 
   async seed() {
     // Crear usuario administrador
-    for(const seedUser of users) {
+    for (const seedUser of users) {
       const user = new User()
       user.name = seedUser.name;
       user.email = seedUser.email;
@@ -72,7 +72,7 @@ export class SeederService {
     // Crear presentaciones
     await this.productsPresentationRepository.save(presentations);
 
-    for (const seedProduct of products) {  
+    for (const seedProduct of products) {
       const category = await this.categoryRepository.findOneBy({ name: seedProduct.category });
       const municipality = await this.municipalityRepository.findOneBy({ name: seedProduct.municipality });
       const presentation = await this.productsPresentationRepository.findOneBy({ description: seedProduct.description });
@@ -87,7 +87,7 @@ export class SeederService {
 
       const logisticsCost = Math.round(seedProduct.price * this.PORCENTAJE);
       const transportCost = Math.round(seedProduct.price * this.PORCENTAJE);
-      const priceSuggested = Math.round(seedProduct.price + logisticsCost + transportCost);
+      const priceFinal = Math.round(seedProduct.price + logisticsCost + transportCost);
 
       const product = new Product();
       product.code = code;
@@ -96,8 +96,7 @@ export class SeederService {
       product.price = seedProduct.price;
       product.costLogistics = logisticsCost;
       product.costTransport = transportCost;
-      product.priceSuggested = priceSuggested;
-      product.priceFinal = priceSuggested;
+      product.priceFinal = priceFinal;
       product.inventory = 10; //se envia 10 por defecto ya que no se tiene el datos de los productos
       product.farm = null;
       product.category = category;

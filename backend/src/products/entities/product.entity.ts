@@ -24,8 +24,8 @@ export class Product {
     @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
     costTransport: number
 
-    @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
-    priceSuggested: number
+    //@Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
+    //priceSuggested: number
 
     @Column({ type: 'decimal', precision: 10, scale: 0, default: 0 })
     priceFinal: number
@@ -50,7 +50,7 @@ export class Product {
     @ManyToOne(() => Municipality, (municipality) => municipality.products)
     municipality: Municipality;
 
-    @ManyToOne(() => Farm, (farm) => farm.products, {nullable: true})
+    @ManyToOne(() => Farm, (farm) => farm.products, { nullable: true })
     farm: Farm | null;
 
     @ManyToOne(() => ProductsPresentation, (presentation) => presentation.products)
