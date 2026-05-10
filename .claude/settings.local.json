@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"d:\\\\ALEJO\\\\UNIVERSIDAD\\\\PRACTICA\\\\PROYECTO\\\\canastas_verdes\" -Directory)",
+      "Bash(Select-Object Name)"
+    ]
+  }
+}

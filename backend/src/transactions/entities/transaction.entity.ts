@@ -4,7 +4,6 @@ import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGenerate
 
 export enum OrderStatus {
     PENDING = 'pending',
-    CONFIRMED = 'confirmed',
     DELIVERED = 'delivered',
     CANCELLED = 'cancelled',
 }

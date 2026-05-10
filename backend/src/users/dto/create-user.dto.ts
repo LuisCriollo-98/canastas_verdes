@@ -12,7 +12,7 @@ export class CreateUserDto {
     email: string;
 
     @IsNotEmpty({ message: 'El teléfono es obligatorio' })
-    @IsPhoneNumber('CO', { message: 'El teléfono debe ser un número colombiano' })
+    @IsPhoneNumber('CO', { message: 'El teléfono debe ser un número' })
     phone: string;
 
     @IsNotEmpty({ message: 'La contraseña es obligatoria' })

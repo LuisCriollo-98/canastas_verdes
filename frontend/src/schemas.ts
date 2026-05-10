@@ -1,4 +1,4 @@
-import { number, z } from "zod"
+import { z } from "zod"
 
 export const ProductSchema = z.object({
     id: z.number(),
@@ -108,6 +108,38 @@ export const ProductFormSchema = z.object({
 
 })
 
+export const TransactionUserSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    email: z.string(),
+    phone: z.string(),
+})
+
+export const TransactionContentsItemSchema = z.object({
+    id: z.number(),
+    quantity: z.number(),
+    price: z.string().transform((v) => parseFloat(v)),
+    product: z.object({
+        id: z.number(),
+        name: z.string(),
+    }),
+})
+
+export const TransactionSchema = z.object({
+    id: z.number(),
+    total: z.string().transform((v) => parseFloat(v)),
+    status: z.enum(['pending', 'delivered', 'cancelled']),
+    transactionsDate: z.string(),
+    user: TransactionUserSchema,
+    contents: z.array(TransactionContentsItemSchema),
+})
+
+export const TransactionsResponseSchema = z.object({
+    transactions: z.array(TransactionSchema),
+    total: z.number(),
+})
+
+export type Transaction = z.infer<typeof TransactionSchema>
 export type Product = z.infer<typeof ProductSchema>
 export type ShoppingCart = z.infer<typeof ShoppingCartSchema>
 export type CartItem = z.infer<typeof ShoppingCartContentsSchema>

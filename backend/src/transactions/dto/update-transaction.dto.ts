@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTransactionDto } from './create-transaction.dto';
+import { IsEnum } from 'class-validator';
+import { OrderStatus } from '../entities/transaction.entity';
 
-export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {}
+export class UpdateTransactionDto {
+    @IsEnum(OrderStatus, { message: 'Estado no válido' })
+    status: OrderStatus;
+}

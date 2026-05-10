@@ -16,7 +16,7 @@ export default async function LoginPage({
             </h2>
 
             {registered && (
-                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-5">
+                <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-5">
                     <p className="text-sm">¡Cuenta creada exitosamente! Inicia sesión para continuar.</p>
                 </div>
             )}

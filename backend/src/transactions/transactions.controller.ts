@@ -22,11 +22,14 @@ export class TransactionsController {
   }
 
   @Get()
-  //Solo el admin puede ver todas las transacciones
   @Roles(UserRole.ADMIN)
-  //Filtro por fecha de transaccion
-  findAll(@Query('transactionDate') transactionDate: string) {
-    return this.transactionsService.findAll(transactionDate);
+  findAll(
+    @Query('dateFrom') dateFrom?: string,
+    @Query('dateTo') dateTo?: string,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '20',
+  ) {
+    return this.transactionsService.findAll(dateFrom, dateTo, +page, +limit);
   }
 
   @Get(':id')

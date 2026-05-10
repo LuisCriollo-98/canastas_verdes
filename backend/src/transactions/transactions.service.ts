@@ -65,26 +65,32 @@ export class TransactionsService {
     return { message: "Pedido almacenado correctamente" };
   }
 
-  findAll(transactionDate?: string) {
+  async findAll(dateFrom?: string, dateTo?: string, page: number = 1, limit: number = 20) {
     const options: FindManyOptions<Transaction> = {
       relations: {
         contents: true,
-        user: true, //incluir usuario para reportes
+        user: true,
       },
-      order: { transactionsDate: 'DESC' }, //mas recientes primero
+      order: { transactionsDate: 'DESC' },
+      take: limit,
+      skip: (page - 1) * limit,
     };
 
-    if (transactionDate) {
-      const date = parseISO(transactionDate);
-      if (!isValid(date)) {
+    if (dateFrom || dateTo) {
+      const from = dateFrom ? parseISO(dateFrom) : new Date(0);
+      const to = dateTo ? parseISO(dateTo) : new Date();
+
+      if ((dateFrom && !isValid(from)) || (dateTo && !isValid(to))) {
         throw new BadRequestException('Fecha no válida');
       }
+
       options.where = {
-        transactionsDate: Between(startOfDay(date), endOfDay(date))
+        transactionsDate: Between(startOfDay(from), endOfDay(to)),
       };
     }
 
-    return this.transactionRepository.find(options);
+    const [transactions, total] = await this.transactionRepository.findAndCount(options);
+    return { transactions, total };
   }
 
   async findOne(id: number, userId?: number) {
@@ -106,8 +112,12 @@ export class TransactionsService {
     return transaction;
   }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
+  async update(id: number, updateTransactionDto: UpdateTransactionDto) {
+    const transaction = await this.transactionRepository.findOneBy({ id });
+    if (!transaction) throw new NotFoundException('La transacción no fue encontrada');
+    transaction.status = updateTransactionDto.status;
+    await this.transactionRepository.save(transaction);
+    return { message: 'Estado actualizado correctamente' };
   }
 
   async remove(id: number) {
