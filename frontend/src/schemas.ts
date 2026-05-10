@@ -139,7 +139,19 @@ export const TransactionsResponseSchema = z.object({
     total: z.number(),
 })
 
+export const ProductEditSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    price: z.string().transform((v) => parseFloat(v)),
+    priceFinal: z.string().transform((v) => parseFloat(v)),
+    inventory: z.number(),
+    category: z.object({ id: z.number(), name: z.string() }),
+    municipality: z.object({ id: z.number(), name: z.string() }),
+    presentation: z.object({ id: z.number(), description: z.string() }),
+})
+
 export type Transaction = z.infer<typeof TransactionSchema>
+export type ProductEdit = z.infer<typeof ProductEditSchema>
 export type Product = z.infer<typeof ProductSchema>
 export type ShoppingCart = z.infer<typeof ShoppingCartSchema>
 export type CartItem = z.infer<typeof ShoppingCartContentsSchema>

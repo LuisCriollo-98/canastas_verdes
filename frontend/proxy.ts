@@ -9,7 +9,7 @@ const protectedPaths = [
     "/profile",
 ]
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
     const token = request.cookies.get("auth_token")
 

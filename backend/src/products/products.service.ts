@@ -139,7 +139,7 @@ export class ProductsService {
     const product = await this.productRepository.findOne({
       where: { id },
       //Relacionar categoria al momento de filtrar el producto por ID, pero si son bastantes datos es mejor no relacionar
-      relations: { category: true, farm: true, presentation: true }
+      relations: { category: true, farm: true, presentation: true, municipality: true }
     })
     if (!product) {
       throw new NotFoundException(`El producto con el ID: ${id} no fue encontrado`)

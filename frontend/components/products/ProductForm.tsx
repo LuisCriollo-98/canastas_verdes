@@ -1,4 +1,4 @@
-import { CategoriesResponseSchema, MunicipalityResponseSchema, ProductPresentationResponseSchema } from "@/src/schemas"
+import { CategoriesResponseSchema, MunicipalityResponseSchema, ProductEdit, ProductPresentationResponseSchema } from "@/src/schemas"
 import { cookies } from "next/headers"
 import ProductFormClient from "./ProductFormClient"
 
@@ -28,7 +28,7 @@ async function getPresentations() {
   return ProductPresentationResponseSchema.parse(await req.json())
 }
 
-export default async function ProductForm() {
+export default async function ProductForm({ product }: { product?: ProductEdit }) {
   const [categories, municipalities, presentations] = await Promise.all([
     getCategories(),
     getMunicipalities(),
@@ -40,6 +40,7 @@ export default async function ProductForm() {
       categories={categories}
       municipalities={municipalities}
       presentations={presentations}
+      product={product}
     />
   )
 }

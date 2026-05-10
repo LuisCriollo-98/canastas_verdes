@@ -1,6 +1,7 @@
 'use client'
 
 import { previewPrices } from "@/actions/preview-prices";
+import { ProductEdit } from "@/src/schemas";
 import { useState } from "react"
 
 type Category = { id: number; name: string }
@@ -17,11 +18,12 @@ type Props = {
     categories: Category[]
     municipalities: Municipality[]
     presentations: Presentation[]
+    product?: ProductEdit
 }
 
-export default function ProductFormClient({ categories, municipalities, presentations }: Props) {
+export default function ProductFormClient({ categories, municipalities, presentations, product }: Props) {
     const [preview, setPreview] = useState<PricePreview | null>(null)
-    const [priceFinal, setPriceFinal] = useState(0)
+    const [priceFinal, setPriceFinal] = useState(product?.priceFinal ?? 0)
     async function handlePriceChange(e: React.ChangeEvent<HTMLInputElement>) {
         const price = Number(e.target.value)
         if (!price || price <= 0) { setPreview(null); return }
@@ -36,16 +38,25 @@ export default function ProductFormClient({ categories, municipalities, presenta
             {/* nombre */}
             <div className="space-y-2">
                 <label htmlFor="name" className="block">Nombre Producto</label>
-                <input id="name" type="text" placeholder="Nombre Producto"
-                    className="border border-gray-300 w-full p-2" name="name" />
+                <input id="name"
+                    type="text"
+                    placeholder="Nombre Producto"
+                    className="border border-gray-300 w-full p-2"
+                    name="name"
+                    defaultValue={product?.name}
+                />
             </div>
 
             {/* precio base */}
             <div className="space-y-2">
                 <label htmlFor="price" className="block">Precio base</label>
-                <input id="price" type="number" placeholder="Precio base"
-                    className="border border-gray-300 w-full p-2" name="price"
-                    min={0} onBlur={handlePriceChange} />
+                <input id="price"
+                    type="number"
+                    placeholder="Precio base"
+                    className="border border-gray-300 w-full p-2"
+                    name="price"
+                    min={0}
+                    defaultValue={product?.price} onBlur={handlePriceChange} />
             </div>
 
             {/* costo logistico — solo lectura */}
@@ -54,7 +65,8 @@ export default function ProductFormClient({ categories, municipalities, presenta
                     Costo logístico
                     <span className="text-xs text-gray-400 ml-1">(5% del precio)</span>
                 </label>
-                <input id="costLogistics" type="number"
+                <input id="costLogistics"
+                    type="number"
                     className="border border-gray-200 w-full p-2 bg-gray-50 text-gray-500"
                     name="costLogistics"
                     value={preview?.logisticsCost ?? 0}
@@ -67,7 +79,8 @@ export default function ProductFormClient({ categories, municipalities, presenta
                     Costo transporte
                     <span className="text-xs text-gray-400 ml-1">(5% del precio)</span>
                 </label>
-                <input id="costTransport" type="number"
+                <input id="costTransport"
+                    type="number"
                     className="border border-gray-200 w-full p-2 bg-gray-50 text-gray-500"
                     name="costTransport"
                     value={preview?.transportCost ?? 0}
@@ -89,7 +102,8 @@ export default function ProductFormClient({ categories, municipalities, presenta
 
             <div className="space-y-2">
                 <label htmlFor="priceFinal" className="block">Precio final</label>
-                <input id="priceFinal" type="number"
+                <input id="priceFinal"
+                    type="number"
                     className="border border-gray-200 w-full p-2 bg-gray-50 text-gray-500"
                     name="priceFinal"
                     value={priceFinal}
@@ -99,15 +113,23 @@ export default function ProductFormClient({ categories, municipalities, presenta
             {/* inventario */}
             <div className="space-y-2">
                 <label htmlFor="inventory" className="block">Inventario</label>
-                <input id="inventory" type="number" placeholder="Cantidad Disponible"
-                    className="border border-gray-300 w-full p-2" name="inventory" min={0} />
+                <input id="inventory"
+                    type="number"
+                    placeholder="Cantidad Disponible"
+                    className="border border-gray-300 w-full p-2"
+                    name="inventory"
+                    min={0}
+                    defaultValue={product?.inventory} />
             </div>
 
             {/* categoria */}
             <div className="space-y-2">
                 <label htmlFor="categoryId" className="block">Categoría</label>
-                <select id="categoryId" name="categoryId"
-                    className="border border-gray-300 w-full p-2 bg-white">
+                <select
+                    id="categoryId"
+                    className="border border-gray-300 w-full p-2 bg-white"
+                    name="categoryId"
+                    defaultValue={product?.category.id}>
                     <option value="">Seleccionar Categoría</option>
                     {categories.map(c => (
                         <option key={c.id} value={c.id}>{c.name}</option>
@@ -118,8 +140,11 @@ export default function ProductFormClient({ categories, municipalities, presenta
             {/* municipio */}
             <div className="space-y-2">
                 <label htmlFor="municipalityId" className="block">Municipio</label>
-                <select id="municipalityId" name="municipalityId"
-                    className="border border-gray-300 w-full p-2 bg-white">
+                <select
+                    id="municipalityId"
+                    className="border border-gray-300 w-full p-2 bg-white"
+                    name="municipalityId"
+                    defaultValue={product?.municipality.id}>
                     <option value="">Seleccionar Municipio</option>
                     {municipalities.map(m => (
                         <option key={m.id} value={m.id}>{m.name}</option>
@@ -130,8 +155,11 @@ export default function ProductFormClient({ categories, municipalities, presenta
             {/* presentacion */}
             <div className="space-y-2">
                 <label htmlFor="presentationId" className="block">Presentación</label>
-                <select id="presentationId" name="presentationId"
-                    className="border border-gray-300 w-full p-2 bg-white">
+                <select
+                    id="presentationId"
+                    className="border border-gray-300 w-full p-2 bg-white"
+                    name="presentationId"
+                    defaultValue={product?.presentation.id}>
                     <option value="">Seleccionar Presentación</option>
                     {presentations.map(p => (
                         <option key={p.id} value={p.id}>{p.description}</option>
