@@ -150,8 +150,13 @@ export const ProductEditSchema = z.object({
     presentation: z.object({ id: z.number(), description: z.string() }),
 })
 
+export const CategoryFormSchema = z.object({
+    name: z.string().min(1, { message: 'El nombre de la categoría no puede ir vacío' }),
+})
+
 export type Transaction = z.infer<typeof TransactionSchema>
 export type ProductEdit = z.infer<typeof ProductEditSchema>
 export type Product = z.infer<typeof ProductSchema>
+export type Category = z.infer<typeof CategorySchema>
 export type ShoppingCart = z.infer<typeof ShoppingCartSchema>
 export type CartItem = z.infer<typeof ShoppingCartContentsSchema>

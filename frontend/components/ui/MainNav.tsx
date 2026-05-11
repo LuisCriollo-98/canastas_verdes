@@ -18,7 +18,7 @@ export default async function MainNav() {
               {user.role === "admin" && (
                 <Link
                   href="/admin/products?page=1"
-                  className="text-sm font-semibold text-white bg-green-700 hover:bg-green-800 px-4 py-1.5 rounded-full transition-colors duration-150 hidden sm:block"
+                  className="text-sm font-semibold text-white bg-green-600 hover:bg-green-800 px-4 py-1.5 rounded-full transition-colors duration-150 hidden sm:block"
                 >
                   Panel de administrador
                 </Link>

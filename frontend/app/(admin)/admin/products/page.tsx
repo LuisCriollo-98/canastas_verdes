@@ -12,7 +12,10 @@ async function getProducts(take: number, skip: number, search: string) {
   const token = cookieStore.get("auth_token")?.value;
   if (!token) redirect("/login");
 
-  const params = new URLSearchParams({ take: String(take), skip: String(skip) });
+  const params = new URLSearchParams({
+    take: String(take),
+    skip: String(skip),
+  });
   if (search) params.set("name", search);
 
   const req = await fetch(`${process.env.API_URL}/products?${params}`, {
@@ -40,9 +43,12 @@ export default async function ProductsPage({
   const { products, total } = await getProducts(productsPerPage, skip, search);
 
   const totalPages = Math.ceil(total / productsPerPage);
-  if (currentPage > totalPages && totalPages > 0) redirect("/admin/products?page=1");
+  if (currentPage > totalPages && totalPages > 0)
+    redirect("/admin/products?page=1");
 
-  const searchExtraQuery = search ? `&search=${encodeURIComponent(search)}` : "";
+  const searchExtraQuery = search
+    ? `&search=${encodeURIComponent(search)}`
+    : "";
 
   return (
     <div>
