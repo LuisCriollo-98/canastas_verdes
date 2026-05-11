@@ -15,6 +15,14 @@ export default async function MainNav() {
         <div className="flex items-center gap-3 shrink-0 pl-3 border-l border-green-600">
           {user ? (
             <>
+              {user.role === "admin" && (
+                <Link
+                  href="/admin/products?page=1"
+                  className="text-sm font-semibold text-white bg-green-700 hover:bg-green-800 px-4 py-1.5 rounded-full transition-colors duration-150 hidden sm:block"
+                >
+                  Panel de administrador
+                </Link>
+              )}
               <span className="text-green-600 font-semibold text-sm hidden sm:block">
                 {user.name}
               </span>
