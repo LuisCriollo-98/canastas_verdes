@@ -1,10 +1,10 @@
 // Validacion de parametros del quuery en la petición GET, especificamente para filtrar productos
-import { IsNumberString, IsOptional } from 'class-validator'
+import { IsNumberString, IsOptional, IsString } from 'class-validator'
 //Filtar productos por categoria
 export class GetProductsQueryDto {
     @IsOptional()
     @IsNumberString({}, { message: 'La categoria debe ser un numero' })
-    category_id: number //Permite validar productos por categoria
+    category_id: number
 
     @IsOptional()
     @IsNumberString({}, { message: 'La finca debe ser un número' })
@@ -15,12 +15,16 @@ export class GetProductsQueryDto {
     municipality_id?: number;
 
     @IsOptional()
-    @IsNumberString({}, { message: 'La cantidad debe ser un numero' })
-    take: number //Sirve para limitar cuantos productos devuelve la consulta 
+    @IsString()
+    name?: string;
 
     @IsOptional()
     @IsNumberString({}, { message: 'La cantidad debe ser un numero' })
-    skip: number //Sirve para limitar cuantos productos devuelve la consulta 
+    take: number
+
+    @IsOptional()
+    @IsNumberString({}, { message: 'La cantidad debe ser un numero' })
+    skip: number
 }
 
 

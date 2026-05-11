@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, ILike, Repository } from 'typeorm';
 import { Category } from '../categories/entities/category.entity';
 import { Farm } from '../farms/entities/farm.entity';
 import { ProductsPresentation } from '../products_presentation/entities/products_presentation.entity';
@@ -116,18 +116,17 @@ export class ProductsService {
     const take = query.take ? Number(query.take) : 10;
     const skip = query.skip ? Number(query.skip) : 0;
     //Configuración de la consulta
+    const where: Record<string, unknown> = {};
+    if (query.category_id) where.category = { id: Number(query.category_id) };
+    if (query.name) where.name = ILike(`%${query.name}%`);
+
     const options: FindManyOptions<Product> = {
       relations: { category: true, farm: true, presentation: true },
       order: { id: 'DESC' },
       take,
       skip,
+      where,
     };
-    //Filtrar productos por categoria
-    if (query.category_id) {
-      options.where = {
-        category: { id: Number(query.category_id) },
-      };
-    }
     //Obtener todos los productos
     const [products, total] = await this.productRepository.findAndCount(options);
 
