@@ -4,16 +4,22 @@ import { Product, ShoppingCart} from "./schemas";
 interface Store {
     total: number;
     contents: ShoppingCart
+    isCartOpen: boolean
     addToCart: (product: Product) => void
-    updateQuantity: (id: Product['id'], quantity: number) => void //actualiza la cantidad de un producto en el carrito desde el select
-    removeFromCart: (id: Product['id']) => void //elimina un producto del carrito
+    updateQuantity: (id: Product['id'], quantity: number) => void
+    removeFromCart: (id: Product['id']) => void
     calculateTotal: () => void
     clearCart: () => void
+    openCart: () => void
+    closeCart: () => void
 }
 //devtools permite ver el estado en el navegador
 export const useStore = create<Store>()(devtools((set, get) => ({
     total: 0,
     contents: [],
+    isCartOpen: false,
+    openCart: () => set({ isCartOpen: true }),
+    closeCart: () => set({ isCartOpen: false }),
     //funcion para agregar productos al carrito
     addToCart: (product) => {
         const { id: productId, ...data } = product

@@ -2,6 +2,7 @@ import Logo from "./Logo";
 import Link from "next/link";
 import { getAuthUser } from "@/actions/auth-actions";
 import LogoutButton from "@/components/auth/LogoutButton";
+import CartIcon from "@/components/cart/CartIcon";
 
 export default async function MainNav() {
   const user = await getAuthUser();
@@ -13,6 +14,7 @@ export default async function MainNav() {
           <Logo />
         </div>
         <div className="flex items-center gap-3 shrink-0 pl-3 border-l border-green-600">
+          <CartIcon />
           {user ? (
             <>
               {user.role === "admin" && (
