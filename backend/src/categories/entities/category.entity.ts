@@ -8,9 +8,6 @@ export class Category {
     @Column({ type: 'varchar', length: 60 }) // Crear columna name
     name: string
 
-    @Column({ type: 'varchar', length: 255, default: 'default.png' }) // Crear columna image
-    image: string;
-
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 

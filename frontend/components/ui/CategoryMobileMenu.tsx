@@ -19,7 +19,7 @@ export default function CategoryMobileMenu({ categories }: { categories: Categor
         <div className="lg:hidden border-b border-green-100 bg-white">
             <button
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-green-700"
+                className="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold text-green-600"
             >
                 <span>Categorías</span>
                 <svg

@@ -5,6 +5,4 @@ import { IsNotEmpty } from 'class-validator';
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
     @IsNotEmpty({ message: 'El nombre de la categoria no puede estar vacio' })
     name: string
-    @IsNotEmpty({ message: 'La imagen de la categoria no puede estar vacia' })
-    image: string;
 }
