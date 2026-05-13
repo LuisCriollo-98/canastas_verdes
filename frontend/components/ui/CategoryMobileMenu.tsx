@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import CategoryLink from "./CategoryLink"
 
-type Category = { id: number; name: string; image: string }
+type Category = { id: number; name: string }
 
 export default function CategoryMobileMenu({ categories }: { categories: Category[] }) {
     const [isOpen, setIsOpen] = useState(false)

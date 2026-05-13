@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation"
 type Category = {
     id: number
     name: string
-    image: string
 }
 
 export default function CategoryLink({ category }: { category: Category }) {
