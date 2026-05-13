@@ -6,7 +6,7 @@ export default function Logo() {
         <span className="text-xl sm:text-2xl lg:text-4xl font-extrabold text-gray-800 tracking-tight">
           Canastas Verdes
         </span>
-        <span className="text-xs sm:text-sm text-gray-400 font-bold">
+        <span className="text-xs sm:text-sm text-green-600 font-bold">
           Frutas y verduras
         </span>
       </div>

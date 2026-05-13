@@ -27,7 +27,9 @@ export default async function CategorySidebar() {
       </aside>
 
       {/* Menú desplegable — solo móvil */}
-      <CategoryMobileMenu categories={categories} />
+      <div className="lg:hidden">
+        <CategoryMobileMenu categories={categories} />
+      </div>
     </>
   );
 }
