@@ -1,9 +1,13 @@
 import Heading from "@/components/ui/Heading";
 import CategoriesTable from "@/components/categories/CategoriesTable";
+import Pagination from "@/components/ui/Pagination";
 import { CategoriesResponseSchema } from "@/src/schemas";
+import { isValidPage } from "@/src/utils";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+
+const PER_PAGE = 20;
 
 async function getCategories() {
   const cookieStore = await cookies();
@@ -15,17 +19,43 @@ async function getCategories() {
     cache: "no-store",
   });
   if (!req.ok) redirect("/login");
-
-  const json = await req.json();
-  return CategoriesResponseSchema.parse(json);
+  return CategoriesResponseSchema.parse(await req.json());
 }
 
-export default async function CategoriesPage() {
-  const categories = await getCategories();
+type SearchParams = Promise<{ page?: string; search?: string }>;
+
+export default async function CategoriesPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const { page, search = "" } = await searchParams;
+  if (!isValidPage(+(page ?? 1))) redirect("/admin/categories?page=1");
+
+  const currentPage = +(page ?? 1);
+  const all = await getCategories();
+
+  const filtered = search
+    ? all.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
+    : all;
+
+  const total = filtered.length;
+  const totalPages = Math.ceil(total / PER_PAGE);
+
+  if (currentPage > totalPages && totalPages > 0)
+    redirect("/admin/categories?page=1");
+
+  const categories = filtered.slice(
+    (currentPage - 1) * PER_PAGE,
+    currentPage * PER_PAGE
+  );
+
+  const searchExtraQuery = search
+    ? `&search=${encodeURIComponent(search)}`
+    : "";
 
   return (
     <div>
-      {/* Cabecera */}
       <div className="flex flex-col mb-6">
         <div className="flex justify-end mb-4">
           <Link
@@ -39,16 +69,47 @@ export default async function CategoriesPage() {
           <Heading>Administrar Categorías</Heading>
           <p className="text-sm text-gray-500 mt-1">
             Actualmente tienes{" "}
-            <span className="font-semibold text-green-600">
-              {categories.length}
-            </span>{" "}
-            categoría{categories.length !== 1 ? "s" : ""}
+            <span className="font-semibold text-green-600">{total}</span>{" "}
+            categoría{total !== 1 ? "s" : ""}
           </p>
         </div>
       </div>
 
-      {/* Tabla */}
+      <form method="GET" className="flex items-center gap-2 mb-6">
+        <input
+          type="text"
+          name="search"
+          defaultValue={search}
+          placeholder="Buscar por nombre..."
+          className="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-green-400"
+        />
+        <input type="hidden" name="page" value="1" />
+        <button
+          type="submit"
+          className="bg-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded hover:bg-green-700 transition-colors"
+        >
+          Buscar
+        </button>
+        {search && (
+          <Link
+            href="/admin/categories?page=1"
+            className="text-sm font-bold text-gray-500 hover:text-red-500 transition-colors"
+          >
+            Limpiar
+          </Link>
+        )}
+      </form>
+
       <CategoriesTable categories={categories} />
+
+      {totalPages > 1 && (
+        <Pagination
+          page={currentPage}
+          totalPages={totalPages}
+          baseUrl="/admin/categories"
+          extraQuery={searchExtraQuery}
+        />
+      )}
     </div>
   );
 }

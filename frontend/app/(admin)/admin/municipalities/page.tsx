@@ -22,20 +22,27 @@ async function getMunicipalities() {
     return MunicipalityResponseSchema.parse(await req.json())
 }
 
-type SearchParams = Promise<{ page?: string }>
+type SearchParams = Promise<{ page?: string; search?: string }>
 
 export default async function MunicipalitiesPage({ searchParams }: { searchParams: SearchParams }) {
-    const { page } = await searchParams
+    const { page, search = "" } = await searchParams
     if (!isValidPage(+(page ?? 1))) redirect("/admin/municipalities?page=1")
 
     const currentPage = +(page ?? 1)
     const all = await getMunicipalities()
-    const total = all.length
+
+    const filtered = search
+        ? all.filter((m) => m.name.toLowerCase().includes(search.toLowerCase()))
+        : all
+
+    const total = filtered.length
     const totalPages = Math.ceil(total / PER_PAGE)
 
     if (currentPage > totalPages && totalPages > 0) redirect("/admin/municipalities?page=1")
 
-    const municipalities = all.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE)
+    const municipalities = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE)
+
+    const searchExtraQuery = search ? `&search=${encodeURIComponent(search)}` : ""
 
     return (
         <div>
@@ -58,6 +65,31 @@ export default async function MunicipalitiesPage({ searchParams }: { searchParam
                 </div>
             </div>
 
+            <form method="GET" className="flex items-center gap-2 mb-6">
+                <input
+                    type="text"
+                    name="search"
+                    defaultValue={search}
+                    placeholder="Buscar por nombre..."
+                    className="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <input type="hidden" name="page" value="1" />
+                <button
+                    type="submit"
+                    className="bg-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded hover:bg-green-700 transition-colors"
+                >
+                    Buscar
+                </button>
+                {search && (
+                    <Link
+                        href="/admin/municipalities?page=1"
+                        className="text-sm font-bold text-gray-500 hover:text-red-500 transition-colors"
+                    >
+                        Limpiar
+                    </Link>
+                )}
+            </form>
+
             <MunicipalitiesTable municipalities={municipalities} />
 
             {totalPages > 1 && (
@@ -65,6 +97,7 @@ export default async function MunicipalitiesPage({ searchParams }: { searchParam
                     page={currentPage}
                     totalPages={totalPages}
                     baseUrl="/admin/municipalities"
+                    extraQuery={searchExtraQuery}
                 />
             )}
         </div>
