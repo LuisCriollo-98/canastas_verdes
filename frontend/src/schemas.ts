@@ -153,6 +153,10 @@ export const CategoryFormSchema = z.object({
     name: z.string().min(1, { message: 'El nombre de la categoría no puede ir vacío' }),
 })
 
+export const MunicipalityFormSchema = z.object({
+    name: z.string().min(1, { message: 'El nombre del municipio no puede ir vacío' }),
+})
+
 export type Transaction = z.infer<typeof TransactionSchema>
 export type ProductEdit = z.infer<typeof ProductEditSchema>
 export type Product = z.infer<typeof ProductSchema>

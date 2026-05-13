@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(Get-ChildItem -Path \"d:\\\\ALEJO\\\\UNIVERSIDAD\\\\PRACTICA\\\\PROYECTO\\\\canastas_verdes\" -Directory)",
-      "Bash(Select-Object Name)"
+      "Bash(Select-Object Name)",
+      "Bash(Get-ChildItem -Path \"d:\\\\ALEJO\\\\UNIVERSIDAD\\\\PRACTICA\\\\PROYECTO\\\\canastas_verdes\\\\backend\\\\src\\\\municipalities\" -Recurse)"
     ]
   }
 }
