@@ -4,7 +4,6 @@ import { CategoriesResponseSchema } from "@/src/schemas";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Search } from "lucide-react";
 
 async function getCategories() {
   const cookieStore = await cookies();

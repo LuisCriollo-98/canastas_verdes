@@ -38,6 +38,13 @@ export default function AdminNav() {
         </Link>
 
         <Link
+          href={"/admin/presentation"}
+          className="rounded text-black font-bold p-2"
+        >
+          Presentaciones
+        </Link>
+
+        <Link
           href={"/"}
           className="rounded bg-green-600 text-white font-bold py-2 px-10"
         >
