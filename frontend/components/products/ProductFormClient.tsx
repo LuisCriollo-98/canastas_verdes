@@ -7,6 +7,7 @@ import { useState } from "react"
 type Category = { id: number; name: string }
 type Municipality = { id: number; name: string }
 type Presentation = { id: number; description: string }
+type Farm = { id: number; name: string }
 type PricePreview = {
     price: number
     logisticsCost: number
@@ -18,10 +19,11 @@ type Props = {
     categories: Category[]
     municipalities: Municipality[]
     presentations: Presentation[]
+    farms: Farm[]
     product?: ProductEdit
 }
 
-export default function ProductFormClient({ categories, municipalities, presentations, product }: Props) {
+export default function ProductFormClient({ categories, municipalities, presentations, farms, product }: Props) {
     const [preview, setPreview] = useState<PricePreview | null>(null)
     const [priceFinal, setPriceFinal] = useState(product?.priceFinal ?? 0)
     async function handlePriceChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -163,6 +165,21 @@ export default function ProductFormClient({ categories, municipalities, presenta
                     <option value="">Seleccionar Presentación</option>
                     {presentations.map(p => (
                         <option key={p.id} value={p.id}>{p.description}</option>
+                    ))}
+                </select>
+            </div>
+
+            {/* finca */}
+            <div className="space-y-2">
+                <label htmlFor="farmId" className="block">Finca</label>
+                <select
+                    id="farmId"
+                    className="border border-gray-300 w-full p-2 bg-white"
+                    name="farmId"
+                    defaultValue={product?.farm?.id ?? ""}>
+                    <option value="">Seleccionar Finca (opcional)</option>
+                    {farms.map(f => (
+                        <option key={f.id} value={f.id}>{f.name}</option>
                     ))}
                 </select>
             </div>

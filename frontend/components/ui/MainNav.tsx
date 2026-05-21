@@ -14,6 +14,18 @@ export default async function MainNav() {
           <Logo />
         </div>
         <div className="flex items-center gap-3 shrink-0 pl-3 border-l border-green-600">
+          <Link
+            href="/home"
+            className="text-sm font-semibold text-white bg-green-500 hover:bg-green-600 px-4 py-1.5 rounded-full transition-colors duration-150"
+          >
+            Inicio
+          </Link>
+          <Link
+            href="/1"
+            className="text-sm font-semibold text-white bg-green-500 hover:bg-green-600 px-4 py-1.5 rounded-full transition-colors duration-150"
+          >
+            Tienda
+          </Link>
           <CartIcon />
           {user ? (
             <>

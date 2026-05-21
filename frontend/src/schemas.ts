@@ -42,6 +42,36 @@ export const ProductPresentationSchema = z.object({
 
 export const ProductPresentationResponseSchema = z.array(ProductPresentationSchema)
 
+/**Schema que me permite trabajar con las fincas */
+export const FarmSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+})
+
+export const FarmsResponseSchema = z.object({
+    farms: z.array(FarmSchema),
+    total: z.number(),
+})
+
+export const FarmDetailSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    address: z.string(),
+    phone: z.string(),
+    email: z.string(),
+    description: z.string(),
+    municipality: z.object({ id: z.number(), name: z.string() }),
+})
+
+export const FarmFormSchema = z.object({
+    name: z.string().min(1, { message: 'El nombre es requerido' }),
+    address: z.string().min(1, { message: 'La dirección es requerida' }),
+    phone: z.string().min(1, { message: 'El teléfono es requerido' }),
+    email: z.string().email({ message: 'El email no es válido' }),
+    description: z.string().min(1, { message: 'La descripción es requerida' }),
+    municipalityId: z.coerce.number({ message: 'El municipio no es válido' }).min(1, { message: 'Selecciona un municipio' }),
+})
+
 /**Schema que me permite trabajar con el municipio */
 export const MunicipalitySchema = z.object({
     id: z.number(),
@@ -104,7 +134,7 @@ export const ProductFormSchema = z.object({
         .min(1, { message: 'Selecciona un municipio' }),
     presentationId: z.coerce.number({ message: 'La presentación no es válida' })
         .min(1, { message: 'Selecciona una presentación' }),
-
+    farmId: z.coerce.number().optional(),
 })
 
 export const TransactionUserSchema = z.object({
@@ -147,6 +177,7 @@ export const ProductEditSchema = z.object({
     category: z.object({ id: z.number(), name: z.string() }),
     municipality: z.object({ id: z.number(), name: z.string() }),
     presentation: z.object({ id: z.number(), description: z.string() }),
+    farm: z.object({ id: z.number(), name: z.string() }).nullable().optional(),
 })
 
 export const CategoryFormSchema = z.object({

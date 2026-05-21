@@ -16,6 +16,7 @@ export async function addProduct(prevState: ActionStateType, formData: FormData)
         categoryId: formData.get('categoryId'),
         municipalityId: formData.get('municipalityId'),
         presentationId: formData.get('presentationId'),
+        farmId: formData.get('farmId') || undefined,
     })
     if (!product.success) {
         return {

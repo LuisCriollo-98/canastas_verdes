@@ -3,7 +3,7 @@ import { CreateFarmDto } from './dto/create-farm.dto';
 import { UpdateFarmDto } from './dto/update-farm.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Farm } from './entities/farm.entity';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, ILike, Repository } from 'typeorm';
 import { Municipality } from '../municipalities/entities/municipality.entity';
 import { GetFarmsQueryDto } from './dto/get-farm.dto';
 
@@ -32,22 +32,20 @@ export class FarmsService {
 
   async findAll(query: GetFarmsQueryDto) {
     const municipalityId = query.municipality_id ? query.municipality_id : null
-    const take = query.take ? query.take : 10
-    const skip = query.skip ? query.skip : 0
+    const take = query.take ? Number(query.take) : 10
+    const skip = query.skip ? Number(query.skip) : 0
     const options: FindManyOptions<Farm> = {
-      relations: {
-        municipality: true
-      },
+      relations: { municipality: true },
       order: { id: 'DESC' },
       take,
-      skip
+      skip,
+      where: {},
     };
     if (municipalityId) {
-      options.where = {
-        municipality: {
-          id: municipalityId
-        }
-      }
+      options.where = { ...options.where as object, municipality: { id: municipalityId } }
+    }
+    if (query.name) {
+      options.where = { ...options.where as object, name: ILike(`%${query.name}%`) }
     }
     const [farms, total] = await this.farmRepository.findAndCount(options);
     return { farms, total }

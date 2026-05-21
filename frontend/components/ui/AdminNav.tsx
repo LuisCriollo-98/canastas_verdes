@@ -16,13 +16,7 @@ export default function AdminNav() {
         >
           Productos
         </Link>
-
-        <Link
-          href={"/admin/orders"}
-          className="rounded text-black font-bold p-2"
-        >
-          Pedidos
-        </Link>
+        
         <Link
           href={"/admin/categories"}
           className="rounded text-black font-bold p-2"
@@ -44,6 +38,18 @@ export default function AdminNav() {
           Presentaciones
         </Link>
 
+        <Link
+          href={"/admin/farms"}
+          className="rounded text-black font-bold p-2"
+        >
+          Fincas
+        </Link>
+        <Link
+          href={"/admin/orders"}
+          className="rounded text-black font-bold p-2"
+        >
+          Pedidos
+        </Link>
         <Link
           href={"/"}
           className="rounded bg-green-600 text-white font-bold py-2 px-10"
