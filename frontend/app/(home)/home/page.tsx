@@ -26,21 +26,21 @@ export default function LandingPage() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
               Del campo a tu mesa
             </h1>
-            <p className="text-green-100 text-lg sm:text-xl leading-relaxed mb-10 max-w-lg">
+            <p className="text-white text-lg sm:text-xl leading-relaxed mb-10 max-w-lg">
               Descubre la mejor selección de frutas y verduras orgánicas,
               cosechadas directamente por agricultores locales.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/1"
-                className="inline-flex items-center justify-center gap-2 bg-green-400 hover:bg-green-300 text-green-900 font-bold px-8 py-4 rounded-full text-lg transition-all duration-200 shadow-lg hover:shadow-green-400/25"
+                className="inline-flex items-center justify-center gap-2 bg-green-700 text-white font-bold px-8 py-4 rounded-full text-lg"
               >
                 Explorar Tienda
                 <ChevronRight className="w-5 h-5" />
               </Link>
               <a
                 href="#nosotros"
-                className="inline-flex items-center justify-center gap-2 border-2 border-green-300 text-green-100 hover:bg-green-800/50 font-semibold px-8 py-4 rounded-full text-lg transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 bg-green-700 text-white  font-semibold px-8 py-4 rounded-full text-lg"
               >
                 Conocer más
               </a>
@@ -249,7 +249,7 @@ export default function LandingPage() {
               <li>
                 <Link
                   href="/1"
-                  className="hover:text-green-400 transition-colors"
+                  className="hover:text-green-600 transition-colors"
                 >
                   Tienda
                 </Link>
