@@ -204,7 +204,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────── */}
-      <section className="py-20 bg-gradient-to-br from-green-700 to-green-900 text-white text-center">
+      <section className="py-20 bg-gradient-to-br from-green-600 to-green-600 text-white text-center">
         <div className="max-w-2xl mx-auto px-6">
           <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">
             ¿Listo para comer más fresco?
