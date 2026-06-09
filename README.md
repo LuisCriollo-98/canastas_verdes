@@ -214,15 +214,6 @@ La aplicación estará disponible en `http://localhost:3000`
 
 ---
 
-## ☁️ Despliegue
-
-| Componente | Plataforma | Estado |
-|---|---|---|
-| Frontend | [Vercel](https://vercel.com) | ✅ Activo |
-| Backend + DB | [Railway](https://railway.app) | ✅ Activo |
-
----
-
 ## 👨‍💻 Autor
 
 **Luis Alejandro Criollo Yaqueno**  
